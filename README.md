@@ -140,4 +140,12 @@ MIT - Sinta-se livre para usar, modificar e distribuir
 
 ## 🤝 Contribuições
 
+---
+✅ **Frontend** deployado no Netlify: https://sistema-fon.netlify.app/
+⏳ **Backend** em desenvolvimento no Render
+
+## Atualização: 2025-12-19 02:05 AM
+- Frontend publicado com sucesso
+- Publish directory configurado para `/frontend`
+
 Contribuições são bem-vindas! Faça um fork, crie uma branch e envie um pull request.
