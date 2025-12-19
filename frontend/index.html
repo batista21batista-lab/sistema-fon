@@ -51,9 +51,9 @@
         <h2>FON</h2>
         <p style="font-size: 11px; color: #95a5a6;">Fluxo Operacional de Negocios</p>
       </div>
-      <div style="padding: 16px 22px; cursor: pointer; border-left: 4px solid transparent;" onclick="ativarSecao('dashboard')">Dashboard</div>
-      <div style="padding: 16px 22px; cursor: pointer; border-left: 4px solid transparent;" onclick="ativarSecao('intermediacoes')">Intermediacoes</div>
-      <div style="padding: 16px 22px; cursor: pointer; border-left: 4px solid transparent;" onclick="ativarSecao('financeiro')">Financeiro</div>
+      <div style="padding: 16px 22px; cursor: pointer; border-left: 4px solid transparent;" onclick="carregarDashboard()">Dashboard</div>
+      <div style="padding: 16px 22px; cursor: pointer; border-left: 4px solid transparent;" onclick="carregarIntermediaco()">Intermediacoes</div>
+      <div style="padding: 16px 22px; cursor: pointer; border-left: 4px solid transparent;" onclick="carregarFinanceiro()">Financeiro</div>
       <div style="padding: 16px 22px; cursor: pointer; border-left: 4px solid transparent;" onclick="ativarSecao('config')">Configuracao</div>
     </div>
     <div class="main-content">
@@ -111,6 +111,35 @@
       document.getElementById('loginPage').style.display = 'flex';
       document.getElementById('appPage').style.display = 'none';
     }
+
+         // Funções para carregar dados do backend
+         const API_BASE_URL = 'http://localhost:3000/api';
+         function mostrarCarregamento(secaoId) {
+                     const secao = document.getElementById('secao-' + secaoId);
+                     secao.innerHTML = '<div style="text-align: center; padding: 40px;"><div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #ddd; border-top: 4px solid var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite;"></div></div>';
+                }
+         function carregarDashboard() {
+                     ativarSecao('dashboard');
+                     mostrarCarregamento('dashboard');
+                     fetch(API_BASE_URL + '/dashboard')
+                          .then(res => res.json())
+                          .then(dados => {
+                                                const secao = document.getElementById('secao-dashboard');
+                                                secao.innerHTML = '<h2>Dashboard</h2><p>Dados carregados com sucesso!</p>';
+                                           })
+                          .catch(err => {
+                                                console.error('Erro ao carregar dashboard:', err);
+                                                const secao2 = document.getElementById('secao-dashboard'); secao2.innerHTML = '<h2>Dashboard</h2><p style="color: red;">Erro ao carregar dados. Verifique a conexão com o backend.</p>';
+                                           });
+                }
+         function carregarIntermediaco() {
+                     ativarSecao('intermediacoes'); mostrarCarregamento('intermediacoes'); fetch(API_BASE_URL + '/intermediacoes').then(res => res.json()).then(dados => {const secao = document.getElementById('secao-intermediacoes'); secao.innerHTML = '<h2>Intermediações</h2><p>Dados carregados com sucesso!</p>';}).catch(err => {console.error('Erro:', err); const s = document.getElementById('secao-intermediacoes'); s.innerHTML = '<h2>Intermediações</h2><p style="color: red;">Erro ao carregar</p>';});
+                }
+         function carregarFinanceiro() {
+                     ativarSecao('financeiro'); mostrarCarregamento('financeiro'); fetch(API_BASE_URL + '/financeiro').then(res => res.json()).then(dados => {const secao = document.getElementById('secao-financeiro'); secao.innerHTML = '<h2>Financeiro</h2><p>Relatórios financeiros carregados com sucesso!</p>';}).catch(err => {console.error('Erro:', err); const s = document.getElementById('secao-financeiro'); s.innerHTML = '<h2>Financeiro</h2><p style="color: red;">Erro ao carregar</p>';});
+                }
+         // Adicionar CSS para animação de loading
+         const style = document.createElement('style'); style.textContent = '@keyframes spin { to { transform: rotate(360deg); } }'; document.head.appendChild(style);
     function ativarSecao(secao) {
       document.querySelectorAll('[id^="secao-"]').forEach(s => s.style.display = 'none');
       document.getElementById('secao-' + secao).style.display = 'block';
