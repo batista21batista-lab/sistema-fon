@@ -7,161 +7,1834 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; color: #333; }
-        :root { --primary-color: #1a3a52; --primary-dark: #0f2537; --primary-light: #2c5573; --accent-color: #3498db; }
-        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 10000; }
-        .toast { background: #fff; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); margin-bottom: 10px; display: flex; align-items: center; gap: 10px; min-width: 280px; animation: slideInRight 0.3s ease; font-size: 14px; }
+        :root {
+            --primary-color: #1a3a52;
+            --primary-dark: #0f2537;
+            --primary-light: #2c5573;
+            --accent-color: #3498db;
+        }
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #fff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 280px;
+            animation: slideInRight 0.3s ease;
+            font-size: 14px;
+        }
         .toast.success { border-left: 4px solid #4caf50; }
         .toast.error { border-left: 4px solid #f44336; }
-        @keyframes slideInRight { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        #loginPage { width: 100%; min-height: 100vh; display: flex; justify-content: center; align-items: center; background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%); padding: 20px; }
-        .loginBox { background: #fff; padding: 40px 35px; border-radius: 12px; box-shadow: 0 15px 50px rgba(0,0,0,0.3); width: 100%; max-width: 420px; }
-        .loginBox h1 { color: var(--primary-color); text-align: center; margin-bottom: 5px; font-size: 32px; font-weight: 800; }
+        .toast.warning { border-left: 4px solid #ff9800; }
+        .toast.info { border-left: 4px solid #2196F3; }
+        @keyframes slideInRight {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        #loginPage {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            padding: 20px;
+        }
+        .loginBox {
+            background: #fff;
+            padding: 40px 35px;
+            border-radius: 12px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 420px;
+            animation: fadeIn 0.4s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .loginBox h1 { color: var(--primary-color); text-align: center; margin-bottom: 5px; font-size: 38px; font-weight: 800; }
+        .loginBox .subtitle { text-align: center; color: #666; margin-bottom: 30px; font-size: 14px; }
+        .formGroup { margin-bottom: 20px; }
+        .formGroup label { display: block; margin-bottom: 6px; color: #333; font-weight: 600; font-size: 13px; }
+        .formGroup input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 14px; transition: all 0.3s; }
+        .formGroup input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 8px rgba(26,58,82,0.3); }
+        #btnLogin {
+            width: 100%;
+            padding: 13px;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 8px;
+        }
+        #btnLogin:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .loginInfo {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            line-height: 1.5;
+        }
         #appPage { display: none; width: 100%; min-height: 100vh; flex-direction: row; }
-        .sidebar { width: 260px; background: var(--primary-color); color: #fff; overflow-y: auto; }
-        .menu-item { padding: 16px 22px; cursor: pointer; transition: all 0.25s; border-left: 4px solid transparent; display: flex; align-items: center; gap: 10px; font-size: 14px; }
+        .sidebar {
+            width: 260px;
+            background: var(--primary-color);
+            color: #fff;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        .sidebar .logo {
+            text-align: center;
+            padding: 24px 20px;
+            border-bottom: 3px solid var(--accent-color);
+            background: var(--primary-dark);
+        }
+        .sidebar .logo h2 { font-size: 28px; margin-bottom: 4px; }
+        .sidebar .logo p { font-size: 11px; color: #95a5a6; }
+        .menu-item {
+            padding: 16px 22px;
+            cursor: pointer;
+            transition: all 0.25s;
+            border-left: 4px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+        .menu-item:hover { background: var(--primary-light); border-left-color: var(--accent-color); }
         .menu-item.active { background: var(--accent-color); border-left-color: #fff; }
         .main-content { flex: 1; display: flex; flex-direction: column; background: #ecf0f1; overflow: hidden; }
-        .header { background: #fff; padding: 16px 26px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .header {
+            background: #fff;
+            padding: 16px 26px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        .header h1 { color: var(--primary-color); font-size: 22px; }
+        .userInfo { display: flex; gap: 10px; align-items: center; font-size: 14px; flex-wrap: wrap; }
+        .userInfo span { font-weight: 600; }
+        #btnLogout {
+            padding: 8px 16px;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        #btnLogout:hover { background: var(--primary-dark); }
         .content { flex: 1; padding: 24px; overflow-y: auto; }
-        .card { background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 3px 15px rgba(0,0,0,0.1); border-top: 4px solid var(--primary-color); margin-bottom: 20px; }
-        .dashboard-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; margin-bottom: 25px; }
-        table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background: #f8f9fa; font-size: 12px; text-transform: uppercase; color: #666; }
-        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; }
-        .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; transition: 0.3s; }
+        .content h2 { color: var(--primary-color); margin-bottom: 20px; font-size: 24px; }
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            border-top: 4px solid var(--primary-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card.clickable { cursor: pointer; }
+        .card.clickable:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+        .card h3 { color: #666; font-size: 13px; margin-bottom: 8px; font-weight: 700; text-transform: uppercase; }
+        .card .value { color: var(--primary-color); font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+        .card .subvalue { color: #95a5a6; font-size: 12px; }
+        .card.status-escriturada { border-top-color: #1565c0; }
+        .card.status-escriturada .value { color: #1565c0; }
+        .card.status-reserva { border-top-color: #2e7d32; }
+        .card.status-reserva .value { color: #2e7d32; }
+        .card.status-cancelada { border-top-color: #c62828; }
+        .card.status-cancelada .value { color: #c62828; }
+        .table-container {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+        .table-container h3 { color: var(--primary-color); margin-bottom: 15px; font-size: 18px; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        table thead { background: #ecf0f1; border-bottom: 2px solid #bdc3c7; }
+        table th { padding: 10px; text-align: left; color: var(--primary-color); font-weight: 700; font-size: 12px; text-transform: uppercase; }
+        table td { padding: 9px 10px; border-bottom: 1px solid #ecf0f1; font-size: 13px; }
+        table tbody tr:hover { background: #f8f9fa; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .badge-escriturado { background: #e3f2fd; color: #1565c0; }
+        .badge-pre-escriturado { background: #e8f5e9; color: #2e7d32; }
+        .badge-reserva { background: #fff3e0; color: #e65100; }
+        .badge-cancelado { background: #ffebee; color: #c62828; }
+        .form-container {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        .form-group2 { display: flex; flex-direction: column; }
+        .form-group2 label { margin-bottom: 6px; color: var(--primary-color); font-weight: 600; font-size: 13px; }
+        .form-group2 input, .form-group2 select { padding: 10px; border: 2px solid #ddd; border-radius: 6px; font-size: 13px; transition: border-color 0.3s; }
+        .form-group2 input:focus, .form-group2 select:focus { outline: none; border-color: var(--primary-color); }
+        .btn { padding: 10px 20px; border: none; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.25s; }
         .btn-primary { background: var(--primary-color); color: #fff; }
-        .secao { display: none; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .btn-secondary { background: #95a5a6; color: #fff; }
+        .btn-secondary:hover { background: #7f8c8d; }
+        .btn-small { padding: 5px 10px; font-size: 11px; }
+        .filters-container { background: #fff; padding: 16px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .chart-container { background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 3px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .chart-real { width: 100%; height: 300px; position: relative; }
+        .chart-placeholder {
+            width: 100%; height: 100%; background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            color: #999; font-size: 16px; text-align: center; padding: 10px;
+        }
+        .bar-chart { display: flex; align-items: flex-end; justify-content: space-around; height: 100%; padding: 20px 0; }
+        .bar { flex: 1; margin: 0 8px; background: var(--primary-color); border-radius: 8px 8px 0 0; position: relative; max-width: 110px; }
+        .bar-label { position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #666; white-space: nowrap; }
+        .bar-value { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 700; color: var(--primary-color); }
+        .pie-chart { display: flex; align-items: center; justify-content: center; flex-direction: column; height: 100%; }
+        .pie-item { display: flex; align-items: center; gap: 10px; margin: 6px 0; font-size: 14px; }
+        .pie-color { width: 20px; height: 20px; border-radius: 4px; }
+        .action-btn { padding: 4px 8px; margin: 0 2px; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; transition: all 0.2s; }
+        .action-btn.edit { background: #2196F3; color: #fff; }
+        .action-btn.delete { background: #f44336; color: #fff; }
+        .action-btn.history { background: #8e44ad; color: #fff; }
+        .action-btn:hover { opacity: 0.85; transform: scale(1.03); }
+        .secao { animation: slideIn 0.25s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        .divider-fifity { margin: 15px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 2px dashed #ddd; }
+        .divider-fifity h4 { color: var(--primary-color); margin-bottom: 8px; font-size: 14px; }
+        .info-text { font-size: 12px; color: #777; }
+        .desp-rec { display: none; }
+        @media (max-width: 1024px) { #appPage { flex-direction: column; } .sidebar { width: 100%; } .sidebar .logo { display: none; } .menu-item { justify-content: center; } }
+        @media (max-width: 768px) { .dashboard-cards { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } table { min-width: 100%; } }
     </style>
 </head>
 <body>
-    <div id="toast-container" class="toast-container"></div>
     <div id="loginPage">
         <div class="loginBox">
             <h1>▶ FON</h1>
-            <p style="text-align:center; margin-bottom:20px;">Fluxo Operacional de Negócios</p>
-            <div style="margin-bottom:15px;"><label>Email</label><input type="email" id="loginEmail" value="admin@fon.com.br"></div>
-            <div style="margin-bottom:20px;"><label>Senha</label><input type="password" id="loginPass" value="admin123"></div>
-            <button class="btn btn-primary" style="width:100%" onclick="handleLogin()">Entrar</button>
+            <p class="subtitle">Fluxo Operacional de Negócios</p>
+            <div class="formGroup">
+                <label for="campoEmail">Email</label>
+                <input type="email" id="campoEmail" placeholder="seu@fon.com.br">
+            </div>
+            <div class="formGroup">
+                <label for="campoSenha">Senha</label>
+                <input type="password" id="campoSenha" placeholder="Digite sua senha">
+            </div>
+            <button type="button" id="btnLogin">Entrar</button>
+            <div class="loginInfo">
+                Credenciais de teste:<br>
+                Admin: admin@fon.com.br / admin123<br>
+                Gerente: gerente@fon.com.br / gerente123
+            </div>
         </div>
     </div>
+
     <div id="appPage">
         <div class="sidebar">
-            <div style="padding:20px; background: var(--primary-dark); text-align:center;"><h2>FON</h2><p style="font-size:10px; opacity:0.7;">Operacional de Negócios</p></div>
-            <div class="menu-item active" onclick="showSecao('dashboard')">📊 Dashboard</div>
-            <div class="menu-item" onclick="showSecao('nova-inter')">➕ Nova Intermediação</div>
-            <div class="menu-item" onclick="showSecao('lista-inter')">📋 Intermediações</div>
-            <div class="menu-item" onclick="showSecao('financeiro')">💰 Financeiro</div>
-            <div class="menu-item" onclick="showSecao('config')">⚙️ Configuração</div>
+            <div class="logo">
+                <h2>▶ FON</h2>
+                <p>Fluxo Operacional de Negócios</p>
+            </div>
+            <div class="menu-item active" data-secao="dashboard">📊 Dashboard</div>
+            <div class="menu-item" data-secao="nova-intermediacao">➕ Nova Intermediação</div>
+            <div class="menu-item" data-secao="intermediacoes">📋 Intermediações</div>
+            <div class="menu-item" data-secao="financeiro">💰 Financeiro</div>
+            <div class="menu-item" data-secao="calculadora">🔢 Calculadora de Taxas</div>
+            <div class="menu-item" data-secao="analise">🏆 Top Corretor</div>
+            <div class="menu-item" data-secao="projecao">📉 Projeção de Vendas</div>
+            <div class="menu-item" data-secao="despesas">🧾 Despesas</div>
+            <div class="menu-item" data-secao="config">⚙️ Configuração</div>
         </div>
+
         <div class="main-content">
-            <div class="header"><h1 id="page-title">Dashboard</h1><div><span id="userName">Usuário</span> <button class="btn" onclick="handleLogout()">Sair</button></div></div>
+            <div class="header">
+                <h1>FON - Fluxo Operacional de Negócios</h1>
+                <div class="userInfo">
+                    <span id="nomeUsuario">👤 Usuário</span>
+                    <span id="apiStatus" style="font-size:12px;color:#666;">API: -</span>
+                    <button id="btnLogout">🚪 Sair</button>
+                </div>
+            </div>
+
             <div class="content">
-                <div id="sec-dashboard" class="secao" style="display:block;">
+                <!-- DASHBOARD -->
+                <div id="secao-dashboard" class="secao">
+                    <h2>📊 Dashboard</h2>
+                    <div class="filters-container">
+                        <p style="margin-bottom:10px;font-size:16px;">Filtros</p>
+                        <div class="form-row">
+                            <div class="form-group2">
+                                <label>Data Início</label>
+                                <input type="date" id="dash-data-inicio">
+                            </div>
+                            <div class="form-group2">
+                                <label>Data Fim</label>
+                                <input type="date" id="dash-data-fim">
+                            </div>
+                            <div class="form-group2">
+                                <label>Tipo</label>
+                                <select id="dash-tipo">
+                                    <option value="Todos">Todos</option>
+                                    <option value="Locação">Locação</option>
+                                    <option value="Intermediação">Intermediação</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="aplicarFiltrosDashboard()">🔍 Filtrar</button>
+                        <button class="btn btn-secondary" onclick="limparFiltrosDashboard()">🔄 Limpar</button>
+                    </div>
+
                     <div class="dashboard-cards">
-                        <div class="card"><h3>Total Vendas</h3><div class="value" id="dash-total-vendas">R$ 0,00</div></div>
-                        <div class="card"><h3>Escrituradas</h3><div class="value" id="dash-total-escr">R$ 0,00</div></div>
-                        <div class="card"><h3>Reserva/Pré</h3><div class="value" id="dash-total-res">R$ 0,00</div></div>
+                        <div class="card">
+                            <h3>Total de Intermediações</h3>
+                            <div class="value" id="total-intermediacoes">0</div>
+                            <div class="subvalue" id="sub-total">Nenhum registro filtrado</div>
+                        </div>
+                        <div class="card status-escriturada clickable" onclick="filtrarPorStatus('Escriturado')">
+                            <h3>📘 Valor Escriturado</h3>
+                            <div class="value" id="valor-escriturado">R$ 0,00</div>
+                            <div class="subvalue" id="sub-escrituradas">0% do total de vendas</div>
+                        </div>
+                        <div class="card status-reserva clickable" onclick="filtrarPorStatus('Reserva/Pré')">
+                            <h3>📗 Valor Reserva/Pré</h3>
+                            <div class="value" id="valor-reserva">R$ 0,00</div>
+                            <div class="subvalue" id="sub-reservas">0% do total de vendas</div>
+                        </div>
+                        <div class="card status-cancelada clickable" onclick="filtrarPorStatus('Cancelado')">
+                            <h3>📕 Valor Cancelado</h3>
+                            <div class="value" id="valor-cancelado">R$ 0,00</div>
+                            <div class="subvalue" id="sub-canceladas">0% do total de vendas</div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-cards">
+                        <div class="card">
+                            <h3>Valor Total Intermediado</h3>
+                            <div class="value" id="valor-total-intermediado">R$ 0,00</div>
+                            <div class="subvalue">Escrituras + Reserva/Pré + Cancelados</div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>Vendas por Mês (Últimos 6 meses)</h3>
+                        <div class="chart-real" id="chart-vendas-mes">
+                            <div class="chart-placeholder">Cadastre intermediações para ver o gráfico.</div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>Distribuição por Status</h3>
+                        <div class="chart-real" id="chart-status">
+                            <div class="chart-placeholder">Cadastre intermediações para ver o gráfico.</div>
+                        </div>
                     </div>
                 </div>
-                <div id="sec-nova-inter" class="secao">
-                    <div class="card">
-                        <h2>Nova Intermediação</h2>
-                        <form id="formInter">
+
+                <!-- NOVA INTERMEDIAÇÃO -->
+                <div id="secao-nova-intermediacao" class="secao" style="display:none;">
+                    <h2>➕ Nova Intermediação</h2>
+                    <div class="form-container">
+                        <form id="formNovaIntermediacao">
                             <div class="form-row">
-                                <div><label>Data</label><input type="date" id="f-data" required></div>
-                                <div><label>PV</label><input type="text" id="f-pv" required></div>
-                                <div><label>Ref</label><input type="text" id="f-ref"></div>
+                                <div class="form-group2">
+                                    <label>Data da Intermediação *</label>
+                                    <input type="date" id="data-inter" required>
+                                </div>
+                                <div class="form-group2">
+                                    <label>Tipo de Intermediação *</label>
+                                    <select id="tipo" required>
+                                        <option value="">Selecione</option>
+                                        <option value="Locação">Locação</option>
+                                        <option value="Intermediação">Intermediação</option>
+                                    </select>
+                                </div>
+                                <div class="form-group2">
+                                    <label>PV *</label>
+                                    <input type="number" id="pv" required placeholder="Ex: 1001">
+                                </div>
+                                <div class="form-group2">
+                                    <label>Ref *</label>
+                                    <input type="number" id="ref" required placeholder="Ex: 501">
+                                </div>
                             </div>
+
                             <div class="form-row">
-                                <div><label>Empreendimento</label><input type="text" id="f-emp" required></div>
-                                <div><label>Unidade</label><input type="text" id="f-un" required></div>
+                                <div class="form-group2">
+                                    <label>Empreendimento *</label>
+                                    <input type="text" id="empreendimento" required>
+                                </div>
+                                <div class="form-group2">
+                                    <label>Unidade *</label>
+                                    <input type="text" id="unidade" required>
+                                </div>
+                                <div class="form-group2">
+                                    <label>Valor da Intermediação (R$) *</label>
+                                    <input type="text" id="valor" required placeholder="R$ 0,00">
+                                </div>
                             </div>
+
                             <div class="form-row">
-                                <div><label>Valor Total (R$)</label><input type="number" step="0.01" id="f-valor" required></div>
-                                <div><label>Taxa (%)</label><input type="number" step="0.01" id="f-taxa-p" required></div>
+                                <div class="form-group2">
+                                    <label>Taxa (%) *</label>
+                                    <input type="number" id="taxa-percent" required step="0.01" placeholder="5,00" min="0">
+                                </div>
+                                <div class="form-group2">
+                                    <label>R$ Taxa (Automático)</label>
+                                    <input type="text" id="taxa-valor" readonly style="background:#f5f5f5;">
+                                </div>
+                                <div class="form-group2">
+                                    <label>Fifity?</label>
+                                    <div style="display:flex;gap:15px;margin-top:4px;font-size:13px;">
+                                        <label style="display:flex;align-items:center;gap:5px;">
+                                            <input type="radio" name="fifity-nova" value="nao" checked> Não
+                                        </label>
+                                        <label style="display:flex;align-items:center;gap:5px;">
+                                            <input type="radio" name="fifity-nova" value="sim"> Sim
+                                        </label>
+                                    </div>
+                                    <p class="info-text">Se Fifity = Não, participação Imobiliária Principal = 100%.</p>
+                                </div>
                             </div>
-                            <div class="form-row" style="background:#f9f9f9; padding:10px; border-radius:8px;">
-                                <div><label>R$ Imob. Principal</label><input type="number" step="0.01" id="f-r-principal"></div>
-                                <div><label>R$ Fon (Pessoa)</label><input type="number" step="0.01" id="f-r-fon"></div>
-                                <div><label>R$ Canella</label><input type="number" step="0.01" id="f-r-canella"></div>
-                                <div><label>R$ Central e Part.</label><input type="number" step="0.01" id="f-r-central"></div>
-                            </div>
+
                             <div class="form-row">
-                                <div><label>Status</label><select id="f-status"><option value="Escriturado">Escriturado</option><option value="Reserva">Reserva</option><option value="Pré Escriturado">Pré Escriturado</option><option value="Cancelado">Cancelado</option></select></div>
-                                <div><label>Corretor</label><input type="text" id="f-corretor"></div>
+                                <div class="form-group2">
+                                    <label>Corretor *</label>
+                                    <input type="text" id="corretor" required>
+                                </div>
+                                <div class="form-group2">
+                                    <label>Sup</label>
+                                    <input type="text" id="sup">
+                                </div>
+                                <div class="form-group2">
+                                    <label>Diretoria</label>
+                                    <input type="text" id="diretoria" placeholder="Digite a diretoria">
+                                </div>
                             </div>
-                            <button type="submit" class="btn btn-primary">Salvar Intermediação</button>
+
+                            <div class="form-row">
+                                <div class="form-group2">
+                                    <label>R$ Imobiliária Principal</label>
+                                    <input type="text" id="r-principal" placeholder="R$ 0,00">
+                                </div>
+                                <div class="form-group2">
+                                    <label>R$ Fon (Pessoa)</label>
+                                    <input type="text" id="r-fon" placeholder="R$ 0,00">
+                                </div>
+                                <div class="form-group2">
+                                    <label>R$ Canella</label>
+                                    <input type="text" id="r-canela" placeholder="R$ 0,00">
+                                </div>
+                                <div class="form-group2">
+                                    <label>R$ Central e Participações</label>
+                                    <input type="text" id="r-central" placeholder="R$ 0,00">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group2">
+                                    <label>Status *</label>
+                                    <select id="status" required>
+                                        <option value="">Selecione</option>
+                                        <option value="Escriturado">Escriturado</option>
+                                        <option value="Reserva">Reserva</option>
+                                        <option value="Pré Escriturado">Pré Escriturado</option>
+                                        <option value="Cancelado">Cancelado</option>
+                                    </select>
+                                </div>
+                                <div class="form-group2">
+                                    <label>Participação Imobiliária Principal (%) *</label>
+                                    <input type="number" id="participacao-principal-percent" step="0.01" value="100.00" min="0" max="100">
+                                </div>
+                                <div class="form-group2">
+                                    <label>Participação Imobiliária Principal R$ (Automático)</label>
+                                    <input type="text" id="participacao-principal-r" readonly style="background:#f5f5f5;">
+                                </div>
+                                <div class="form-group2">
+                                    <label>Participação Imobiliária Principal Taxa (Automático)</label>
+                                    <input type="text" id="participacao-principal-taxa" readonly style="background:#f5f5f5;">
+                                </div>
+                            </div>
+
+                            <div id="fifity-nova-container" style="display:none;">
+                                <div class="divider-fifity">
+                                    <h4>Imobiliária Fifity</h4>
+                                    <div class="form-row">
+                                        <div class="form-group2">
+                                            <label>Nome Imobiliária</label>
+                                            <input type="text" id="imob-fifity-nome">
+                                        </div>
+                                        <div class="form-group2">
+                                            <label>Participação Fifity (%)</label>
+                                            <input type="number" id="imob-fifity-percent" step="0.01" min="0" max="100">
+                                        </div>
+                                        <div class="form-group2">
+                                            <label>Participação Fifity R$ (Automático)</label>
+                                            <input type="text" id="imob-fifity-r" readonly style="background:#f5f5f5;">
+                                        </div>
+                                        <div class="form-group2">
+                                            <label>Participação Fifity Taxa (Automático)</label>
+                                            <input type="text" id="imob-fifity-taxa" readonly style="background:#f5f5f5;">
+                                        </div>
+                                    </div>
+                                    <p class="info-text">A soma de Imobiliária Principal (%) + Fifity (%) deve ser exatamente 100%.</p>
+                                </div>
+                            </div>
+
+                            <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">
+                                <button type="submit" class="btn btn-primary" id="btnSalvarIntermediacao">💾 Salvar Intermediação</button>
+                                <button type="button" class="btn btn-secondary" onclick="limparFormularioNovaIntermediacao()">🧹 Limpar</button>
+                            </div>
                         </form>
                     </div>
                 </div>
-                <div id="sec-lista-inter" class="secao">
-                    <div class="card"><table id="tableInter"><thead><tr><th>Data</th><th>PV</th><th>Emp.</th><th>Valor</th><th>Status</th><th>Ações</th></tr></thead><tbody></tbody></table></div>
-                </div>
-                <div id="sec-financeiro" class="secao">
-                    <div class="dashboard-cards">
-                        <div class="card"><h3>Total Imob. Principal</h3><div class="value" id="fin-total-principal">R$ 0,00</div></div>
-                        <div class="card"><h3>Total Fon (Pessoa)</h3><div class="value" id="fin-total-fon">R$ 0,00</div></div>
-                        <div class="card"><h3>Total Canella</h3><div class="value" id="fin-total-canella">R$ 0,00</div></div>
-                        <div class="card"><h3>Total Central</h3><div class="value" id="fin-total-central">R$ 0,00</div></div>
+
+                <!-- LISTA INTERMEDIAÇÕES -->
+                <div id="secao-intermediacoes" class="secao" style="display:none;">
+                    <h2>📋 Intermediações Cadastradas</h2>
+                    <div class="filters-container">
+                        <div class="form-row">
+                            <div class="form-group2">
+                                <label>PV</label>
+                                <input type="text" id="filtro-inter-pv" placeholder="Número do PV">
+                            </div>
+                            <div class="form-group2">
+                                <label>Tipo</label>
+                                <select id="filtro-inter-tipo">
+                                    <option value="">Todos</option>
+                                    <option value="Locação">Locação</option>
+                                    <option value="Intermediação">Intermediação</option>
+                                </select>
+                            </div>
+                            <div class="form-group2">
+                                <label>Status</label>
+                                <select id="filtro-inter-status">
+                                    <option value="">Todos</option>
+                                    <option value="Escriturado">Escriturado</option>
+                                    <option value="Reserva">Reserva</option>
+                                    <option value="Pré Escriturado">Pré Escriturado</option>
+                                    <option value="Cancelado">Cancelado</option>
+                                </select>
+                            </div>
+                            <div class="form-group2">
+                                <label>Data Início</label>
+                                <input type="date" id="filtro-inter-data-inicio">
+                            </div>
+                            <div class="form-group2">
+                                <label>Data Fim</label>
+                                <input type="date" id="filtro-inter-data-fim">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="renderIntermediacoes()">🔍 Aplicar Filtros</button>
+                    </div>
+
+                    <div class="table-container">
+                        <h3>Lista de Intermediações</h3>
+                        <table id="tabela-intermediacoes">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>PV</th>
+                                    <th>Tipo</th>
+                                    <th>Empreendimento</th>
+                                    <th>Unidade</th>
+                                    <th>Corretor</th>
+                                    <th>Status</th>
+                                    <th>Valor</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
-                <div id="sec-config" class="secao">
-                    <div class="card">
-                        <h2>Configuração</h2>
-                        <div style="margin-top:15px;"><label>URL do Backend (API)</label><input type="text" id="config-api-url" placeholder="https://seu-backend.onrender.com"><button class="btn btn-primary" style="margin-top:10px;" onclick="saveConfig()">Salvar Configuração</button></div>
+
+                <!-- FINANCEIRO -->
+                <div id="secao-financeiro" class="secao" style="display:none;">
+                    <h2>💰 Financeiro</h2>
+                    <div class="filters-container">
+                        <div class="form-row">
+                            <div class="form-group2">
+                                <label>Tipo</label>
+                                <select id="filtro-fin-tipo">
+                                    <option value="">Todos</option>
+                                    <option value="Locação">Locação</option>
+                                    <option value="Intermediação">Intermediação</option>
+                                </select>
+                            </div>
+                            <div class="form-group2">
+                                <label>Status</label>
+                                <select id="filtro-fin-status">
+                                    <option value="">Todos</option>
+                                    <option value="Escriturado">Escriturado</option>
+                                    <option value="Reserva">Reserva</option>
+                                    <option value="Pré Escriturado">Pré Escriturado</option>
+                                    <option value="Cancelado">Cancelado</option>
+                                </select>
+                            </div>
+                            <div class="form-group2">
+                                <label>Data Início</label>
+                                <input type="date" id="filtro-fin-data-inicio">
+                            </div>
+                            <div class="form-group2">
+                                <label>Data Fim</label>
+                                <input type="date" id="filtro-fin-data-fim">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="renderFinanceiro()">🎯 Filtrar</button>
+                    </div>
+
+                    <div class="dashboard-cards">
+                        <div class="card">
+                            <h3>Valor Total Intermediado</h3>
+                            <div class="value" id="fin-valor-total">R$ 0,00</div>
+                            <div class="subvalue" id="fin-participacao-total">Participação Imobiliária Principal: R$ 0,00</div>
+                        </div>
+                        <div class="card">
+                            <h3>R$ Taxa Total</h3>
+                            <div class="value" id="fin-taxa-total">R$ 0,00</div>
+                            <div class="subvalue" id="fin-taxa-percentual">0,00% sobre o valor intermediado</div>
+                        </div>
+                        <div class="card">
+                            <h3>R$ Taxa Participação</h3>
+                            <div class="value" id="fin-taxa-part">R$ 0,00</div>
+                            <div class="subvalue" id="fin-taxa-part-percent">0,00% sobre a participação</div>
+                        </div>
+                        <div class="card">
+                            <h3>Total R$ Imobiliária Principal</h3>
+                            <div class="value" id="fin-r-principal-total">R$ 0,00</div>
+                            <div class="subvalue" id="fin-r-principal-info"></div>
+                        </div>
+                        <div class="card">
+                            <h3>Total R$ Fon (Pessoa)</h3>
+                            <div class="value" id="fin-r-fon-total">R$ 0,00</div>
+                            <div class="subvalue" id="fin-r-fon-info"></div>
+                        </div>
+                        <div class="card">
+                            <h3>Total R$ Canella</h3>
+                            <div class="value" id="fin-r-canela-total">R$ 0,00</div>
+                            <div class="subvalue" id="fin-r-canela-info"></div>
+                        </div>
+                        <div class="card">
+                            <h3>Total R$ Central e Participações</h3>
+                            <div class="value" id="fin-r-central-total">R$ 0,00</div>
+                            <div class="subvalue" id="fin-r-central-info"></div>
+                        </div>
+                    </div>
+
+                    <div class="filters-container">
+                        <p style="margin-bottom:10px;font-size:16px;">Pendentes / Recebidos</p>
+                        <div class="form-row">
+                            <div class="form-group2">
+                                <label>Beneficiário</label>
+                                <select id="fin-beneficiario">
+                                    <option value="">Todos</option>
+                                    <option value="principal">Imobiliária Principal</option>
+                                    <option value="fon">Fon (Pessoa)</option>
+                                    <option value="canella">Canella</option>
+                                    <option value="central">Central e Participações</option>
+                                </select>
+                            </div>
+                            <div class="form-group2">
+                                <label>Data Início</label>
+                                <input type="date" id="fin-aging-data-inicio">
+                            </div>
+                            <div class="form-group2">
+                                <label>Data Fim</label>
+                                <input type="date" id="fin-aging-data-fim">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="renderPendentesRecebidos()">📌 Aplicar Filtros</button>
+                    </div>
+
+                    <div class="table-container">
+                        <h3>Pendentes</h3>
+                        <p id="fin-pendentes-total" class="info-text">Total pendente: R$ 0,00</p>
+                        <table id="tabela-pendentes">
+                            <thead>
+                                <tr>
+                                    <th>PV</th>
+                                    <th>Empreendimento</th>
+                                    <th>Valor</th>
+                                    <th>Status</th>
+                                    <th>Aging (dias)</th>
+                                    <th>Beneficiário</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-container">
+                        <h3>Recebidos</h3>
+                        <p id="fin-recebidos-total" class="info-text">Total recebido: R$ 0,00</p>
+                        <table id="tabela-recebidos">
+                            <thead>
+                                <tr>
+                                    <th>PV</th>
+                                    <th>Empreendimento</th>
+                                    <th>Valor</th>
+                                    <th>Status</th>
+                                    <th>Aging (dias)</th>
+                                    <th>Beneficiário</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- CALCULADORA -->
+                <div id="secao-calculadora" class="secao" style="display:none;">
+                    <h2>🔢 Calculadora de Taxas</h2>
+                    <div class="form-container">
+                        <div class="form-row">
+                            <div class="form-group2">
+                                <label>Valor da Intermediação (R$)</label>
+                                <input type="number" id="calc-valor" step="0.01" min="0">
+                            </div>
+                            <div class="form-group2">
+                                <label>Taxa (%)</label>
+                                <input type="number" id="calc-taxa-percent" step="0.01" min="0">
+                            </div>
+                            <div class="form-group2">
+                                <label>Fifity?</label>
+                                <select id="calc-fifity">
+                                    <option value="nao">Não</option>
+                                    <option value="sim">Sim</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="divider-fifity">
+                            <h4>Participação Imobiliária Principal</h4>
+                            <div class="form-row">
+                                <div class="form-group2">
+                                    <label>Participação Imobiliária Principal (%)</label>
+                                    <input type="number" id="calc-principal-percent" step="0.01" value="100.00" min="0" max="100">
+                                </div>
+                                <div class="form-group2">
+                                    <label>R$ Imobiliária Principal</label>
+                                    <input type="text" id="calc-principal-r" readonly style="background:#f5f5f5;">
+                                </div>
+                                <div class="form-group2">
+                                    <label>Taxa Imobiliária Principal (R$)</label>
+                                    <input type="text" id="calc-principal-taxa" readonly style="background:#f5f5f5;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="calc-fifity-container" style="display:none;">
+                            <div class="divider-fifity">
+                                <h4>Imobiliária Fifity</h4>
+                                <div class="form-row">
+                                    <div class="form-group2">
+                                        <label>Nome Imobiliária</label>
+                                        <input type="text" id="calc-imob-nome">
+                                    </div>
+                                    <div class="form-group2">
+                                        <label>Participação Fifity (%)</label>
+                                        <input type="number" id="calc-imob-percent" step="0.01" min="0" max="100">
+                                    </div>
+                                    <div class="form-group2">
+                                        <label>R$ Fifity</label>
+                                        <input type="text" id="calc-imob-r" readonly style="background:#f5f5f5;">
+                                    </div>
+                                    <div class="form-group2">
+                                        <label>Taxa Fifity (R$)</label>
+                                        <input type="text" id="calc-imob-taxa" readonly style="background:#f5f5f5;">
+                                    </div>
+                                </div>
+                                <p class="info-text">A soma de Imobiliária Principal (%) + Fifity (%) deve ser 100%.</p>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">
+                            <button class="btn btn-primary" type="button" onclick="calcularTaxas()">🧮 Calcular</button>
+                            <button class="btn btn-secondary" type="button" onclick="gerarPdfCalculadora()">📄 Gerar PDF</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ANALISE -->
+                <div id="secao-analise" class="secao" style="display:none;">
+                    <h2>🏆 Top Corretor</h2>
+                    <div class="chart-container">
+                        <h3>Top 5 Corretores por Valor Intermediado</h3>
+                        <div class="chart-real" id="chart-top-corretor">
+                            <div class="chart-placeholder">Cadastre intermediações com o nome do corretor para ver o ranking.</div>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <h3>Ranking de Corretores</h3>
+                        <table id="tabela-top-corretor">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Corretor</th>
+                                    <th>Qtd. Intermediações</th>
+                                    <th>Valor Total</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- PROJEÇÃO -->
+                <div id="secao-projecao" class="secao" style="display:none;">
+                    <h2>📉 Projeção de Vendas</h2>
+                    <div class="chart-container">
+                        <h3>Previsão Mensal (próximos 3 meses)</h3>
+                        <div class="chart-real" id="chart-projecao">
+                            <div class="chart-placeholder">Cadastre intermediações com data para ver the projeção.</div>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <h3>Análise de Tendência</h3>
+                        <p id="projecao-resumo" style="font-size:14px;color:#555;">
+                            A tendência será calculada com base na média dos últimos meses assim que houver dados suficientes.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- DESPESAS -->
+                <div id="secao-despesas" class="secao" style="display:none;">
+                    <h2>💸 Despesas</h2>
+                    <div class="filters-container">
+                        <div class="form-row">
+                            <div class="form-group2">
+                                <label>Data Início</label>
+                                <input type="date" id="filtro-desp-data-inicio">
+                            </div>
+                            <div class="form-group2">
+                                <label>Data Fim</label>
+                                <input type="date" id="filtro-desp-data-fim">
+                            </div>
+                            <div class="form-group2">
+                                <label>Tipo de Despesa</label>
+                                <input type="text" id="filtro-desp-tipo" placeholder="Ex: Aluguel, Comissão">
+                            </div>
+                            <div class="form-group2">
+                                <label>Recorrência</label>
+                                <select id="filtro-desp-recorr">
+                                    <option value="">Todas</option>
+                                    <option value="sim">Somente recorrentes</option>
+                                    <option value="nao">Somente não recorrentes</option>
+                                </select>
+                            </div>
+                            <div class="form-group2">
+                                <label>Agendadas</label>
+                                <select id="filtro-desp-agendadas">
+                                    <option value="">Todas</option>
+                                    <option value="sim">Somente agendadas</option>
+                                    <option value="nao">Somente não agendadas</option>
+                                </select>
+                            </div>
+                            <div class="form-group2">
+                                <label>Status</label>
+                                <select id="filtro-desp-status">
+                                    <option value="">Todos</option>
+                                    <option value="Pendente">Pendente</option>
+                                    <option value="Pago">Pago</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="renderDespesas()">🔍 Aplicar filtros</button>
+                        <button class="btn btn-primary" onclick="imprimirRelatorioDespesas()">📄 Relatório (PDF)</button>
+                    </div>
+
+                    <div class="form-container">
+                        <h3>Nova Despesa</h3>
+                        <div class="form-row">
+                            <div class="form-group2">
+                                <label>Data</label>
+                                <input type="date" id="desp-data">
+                            </div>
+                            <div class="form-group2">
+                                <label>Tipo de Despesa</label>
+                                <input type="text" id="desp-tipo" placeholder="Ex: Aluguel, Internet">
+                            </div>
+                            <div class="form-group2">
+                                <label>Valor da Despesa</label>
+                                <input type="text" id="desp-valor" placeholder="R$ 0,00">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group2">
+                                <label>Despesa Recorrente?</label>
+                                <select id="desp-recorrente">
+                                    <option value="nao">Não</option>
+                                    <option value="sim">Sim</option>
+                                </select>
+                            </div>
+                            <div class="form-group2 desp-rec">
+                                <label>Recorrência</label>
+                                <select id="desp-rec-tipo">
+                                    <option value="diaria">Diária</option>
+                                    <option value="semanal">Semanal</option>
+                                    <option value="quinzenal">Quinzenal</option>
+                                    <option value="mensal">Mensal</option>
+                                </select>
+                            </div>
+                            <div class="form-group2 desp-rec">
+                                <label>Início Recorrência</label>
+                                <input type="date" id="desp-rec-inicio">
+                            </div>
+                            <div class="form-group2 desp-rec">
+                                <label>Fim Recorrência</label>
+                                <input type="date" id="desp-rec-fim">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group2">
+                                <label>Status da Despesa</label>
+                                <select id="desp-status">
+                                    <option value="Pendente">Pendente</option>
+                                    <option value="Pago">Pago</option>
+                                </select>
+                            </div>
+                            <div class="form-group2">
+                                <label>Data de Pagamento</label>
+                                <input type="date" id="desp-data-pag">
+                            </div>
+                            <div class="form-group2">
+                                <label>Observação (máx. 25 palavras)</label>
+                                <input type="text" id="desp-obs" maxlength="250">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" type="button" onclick="salvarDespesa()" id="btnSalvarDespesa">💾 Salvar Despesa</button>
+                    </div>
+
+                    <div class="table-container" id="relatorio-despesas">
+                        <h3>Lista de Despesas</h3>
+                        <p class="info-text" id="desp-totais">Totais - Pendente: R$ 0,00 | Pago: R$ 0,00</p>
+                        <table id="tabela-despesas">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Tipo</th>
+                                    <th>Valor</th>
+                                    <th>Recorrente</th>
+                                    <th>Status</th>
+                                    <th>Data Pag.</th>
+                                    <th>Agendada</th>
+                                    <th>Obs</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>Despesas Pendente x Pago</h3>
+                        <div class="chart-real" id="chart-despesas-status">
+                            <div class="chart-placeholder">Cadastre despesas para ver o comparativo.</div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>Projeção de Despesas Futuras (recorrentes e agendadas)</h3>
+                        <div class="chart-real" id="chart-despesas-projecao">
+                            <div class="chart-placeholder">Cadastre despesas recorrentes ou agendadas para ver a projeção.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONFIGURAÇÃO -->
+                <div id="secao-config" class="secao" style="display:none;">
+                    <h2>⚙️ Configuração</h2>
+                    <div class="form-container">
+                        <p style="font-size:14px;color:#555;margin-bottom:10px;">
+                            Configure a URL do backend (Render) para salvar e buscar dados com backup.
+                        </p>
+                        <div class="form-row">
+                            <div class="form-group2">
+                                <label>URL da API (Render)</label>
+                                <input type="text" id="cfg-api-url" placeholder="Ex: https://seuapp.onrender.com">
+                                <p class="info-text">Dica: não coloque /api no final. O sistema adiciona automaticamente.</p>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                            <button class="btn btn-primary" type="button" onclick="salvarConfigApi()">💾 Salvar</button>
+                            <button class="btn btn-secondary" type="button" onclick="testarApi()">🔎 Testar Conexão</button>
+                        </div>
+                        <div style="margin-top:15px;">
+                            <p class="info-text" id="cfg-api-msg">Status: -</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div id="toast-container"></div>
+
     <script>
-        let currentUser = null; let apiUrl = localStorage.getItem('fon_api_url') || ''; let data = { intermediacoes: [], despesas: [] };
-        function showToast(msg, type='success') { const container = document.getElementById('toast-container'); const t = document.createElement('div'); t.className = 'toast ' + type; t.textContent = msg; container.appendChild(t); setTimeout(() => t.remove(), 3000); }
-        function formatBRL(v) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0); }
-        async function apiFetch(endpoint, options = {}) {
-            if (!apiUrl && endpoint !== 'login') { showToast('Configure a URL da API', 'error'); return null; }
-            const base = apiUrl || ''; const url = base.endsWith('/') ? base + 'api/' + endpoint : base + '/api/' + endpoint;
-            const token = localStorage.getItem('fon_token'); const headers = { 'Content-Type': 'application/json', ...options.headers };
-            if (token) headers['Authorization'] = 'Bearer ' + token;
-            try { const res = await fetch(url, { ...options, headers }); if (res.status === 401 || res.status === 403) { if(token) handleLogout(); return null; } return await res.json(); }
-            catch (e) { showToast('Erro na API', 'error'); return null; }
+        // ==========================
+        // CONFIG API
+        // ==========================
+        const API_KEY = 'fonApiBaseUrl';
+        function getApiBase() {
+            const saved = localStorage.getItem(API_KEY);
+            return (saved && saved.trim()) ? saved.trim().replace(/\/+$/, '') : '';
         }
-        async function handleLogin() {
-            const email = document.getElementById('loginEmail').value; const password = document.getElementById('loginPass').value;
-            const res = await apiFetch('login', { method: 'POST', body: JSON.stringify({ email, password }) });
-            if (res && res.token) { localStorage.setItem('fon_token', res.token); currentUser = res.user; document.getElementById('userName').textContent = currentUser.name; document.getElementById('loginPage').style.display = 'none'; document.getElementById('appPage').style.display = 'flex'; loadData(); }
-            else showToast('Falha no login', 'error');
+        function setApiBase(url) {
+            const u = (url || '').trim().replace(/\/+$/, '');
+            localStorage.setItem(API_KEY, u);
+            updateApiStatus();
         }
-        function handleLogout() { localStorage.removeItem('fon_token'); location.reload(); }
-        async function loadData() { const res = await apiFetch('data'); if (res) { data = res; renderAll(); } }
-        async function saveData() { await apiFetch('save', { method: 'POST', body: JSON.stringify(data) }); showToast('Dados salvos'); }
-        function showSecao(s) { document.querySelectorAll('.secao').forEach(el => el.style.display = 'none'); document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active')); document.getElementById('sec-' + s).style.display = 'block'; document.getElementById('page-title').textContent = s.toUpperCase(); }
-        function renderAll() { renderDashboard(); renderLista(); renderFinanceiro(); }
+        function apiUrl(path) {
+            const base = getApiBase();
+            if (!base) return '';
+            return base.replace(/\/+$/, '') + '/api' + path;
+        }
+        function updateApiStatus() {
+            const el = document.getElementById('apiStatus');
+            const base = getApiBase();
+            el.textContent = base ? ('API: ' + base) : 'API: (não configurada)';
+            el.style.color = base ? '#2e7d32' : '#c62828';
+        }
+        function salvarConfigApi() {
+            const v = document.getElementById('cfg-api-url').value;
+            if (!v.trim()) {
+                showToast('warning', 'Informe a URL do backend (Render).');
+                return;
+            }
+            setApiBase(v);
+            showToast('success', 'URL da API salva.');
+            document.getElementById('cfg-api-msg').textContent = 'Status: URL salva: ' + getApiBase();
+        }
+        async function testarApi() {
+            const msg = document.getElementById('cfg-api-msg');
+            msg.textContent = 'Status: testando...';
+            const url = apiUrl('/health');
+            if (!url) {
+                msg.textContent = 'Status: configure a URL da API primeiro.';
+                showToast('warning', 'Configure a URL da API primeiro.');
+                return;
+            }
+            try {
+                const res = await fetch(url);
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) throw new Error(data && data.error ? data.error : 'Falha ao conectar.');
+                msg.textContent = 'Status: OK (' + (data.status || 'online') + ')';
+                showToast('success', 'API conectada com sucesso.');
+            } catch (e) {
+                msg.textContent = 'Status: ERRO - ' + e.message;
+                showToast('error', 'Não foi possível conectar na API: ' + e.message);
+            }
+        }
+
+        // ==========================
+        // VARIÁVEIS GLOBAIS
+        // ==========================
+        let usuarioLogado = null;
+        let token = null;
+        let intermediacoes = [];
+        let historicoPV = [];
+        let editingId = null;
+        let despesas = [];
+        let despEditingId = null;
+
+        // ==========================
+        // UTILS
+        // ==========================
+        function showToast(type, message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast ' + (type || '');
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3500);
+        }
+        function formatCurrencyBRL(valor, casas) {
+            if (isNaN(valor)) valor = 0;
+            const dec = typeof casas === 'number' ? casas : 2;
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: dec, maximumFractionDigits: dec });
+        }
+        function parseDate(str) {
+            if (!str) return null;
+            const parts = str.split('-');
+            if (parts.length < 3) return null;
+            const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+            return isNaN(d.getTime()) ? null : d;
+        }
+        function isDateInRange(dateStr, iniStr, fimStr) {
+            const d = parseDate(dateStr);
+            if (!d) return false;
+            if (iniStr) {
+                const di = parseDate(iniStr);
+                if (di && d < di) return false;
+            }
+            if (fimStr) {
+                const df = parseDate(fimStr);
+                if (df && d > df) return false;
+            }
+            return true;
+        }
+        function parseBRL(str) {
+            if (!str) return 0;
+            let s = String(str).trim();
+            s = s.replace(/[^\d,.-]/g, '');
+            if (!s) return 0;
+            const lastComma = s.lastIndexOf(',');
+            const lastDot = s.lastIndexOf('.');
+            const sep = Math.max(lastComma, lastDot);
+            let intPart, decPart;
+            if (sep >= 0) {
+                intPart = s.slice(0, sep).replace(/[^\d]/g, '');
+                decPart = s.slice(sep + 1).replace(/[^\d]/g, '');
+            } else {
+                intPart = s.replace(/[^\d]/g, '');
+                decPart = '';
+            }
+            if (intPart === '') intPart = '0';
+            let numStr = intPart;
+            if (decPart) numStr += '.' + decPart;
+            const n = parseFloat(numStr);
+            return isNaN(n) ? 0 : n;
+        }
+        function aplicarMascaraMoeda(id) {
+            const input = document.getElementById(id);
+            if (!input) return;
+            input.addEventListener('blur', () => {
+                const v = parseBRL(input.value);
+                input.value = v ? formatCurrencyBRL(v) : '';
+            });
+        }
+        function diffDias(dataIniStr, dataFimStr) {
+            const d1 = parseDate(dataIniStr);
+            const d2 = parseDate(dataFimStr);
+            if (!d1 || !d2) return null;
+            const ms = d2.getTime() - d1.getTime();
+            return Math.floor(ms / (1000 * 60 * 60 * 24));
+        }
+        function hojeISO() {
+            const d = new Date();
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${day}`;
+        }
+        function authHeaders() {
+            return token ? { 'Authorization': 'Bearer ' + token } : {};
+        }
+        async function apiFetch(path, opts) {
+            const url = apiUrl(path);
+            if (!url) throw new Error('API não configurada. Vá em Configuração e informe a URL do Render.');
+            const o = opts || {};
+            o.headers = { 'Content-Type': 'application/json', ...(o.headers || {}), ...authHeaders() };
+            const res = await fetch(url, o);
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) {
+                throw new Error((data && data.error) ? data.error : ('Erro HTTP ' + res.status));
+            }
+            return data;
+        }
+
+        // ==========================
+        // LOGIN (via backend)
+        // ==========================
+        async function fazerLogin() {
+            const email = document.getElementById('campoEmail').value.trim().toLowerCase();
+            const senha = document.getElementById('campoSenha').value;
+            if (!email || !senha) {
+                showToast('warning', 'Informe email e senha.');
+                return;
+            }
+            try {
+                const data = await apiFetch('/auth/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, senha })
+                });
+                token = data.token;
+                usuarioLogado = data.user;
+                sessionStorage.setItem('fonAuth', JSON.stringify({ token, usuarioLogado }));
+                document.getElementById('nomeUsuario').textContent = `👤 ${usuarioLogado.nome} (${usuarioLogado.email})`;
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('appPage').style.display = 'flex';
+                ativarSecao('dashboard');
+                await carregarTudoDoBackend();
+                renderTudo();
+                showToast('success', `Bem-vindo, ${usuarioLogado.nome}!`);
+            } catch (e) {
+                showToast('error', 'Login falhou: ' + e.message);
+            }
+        }
+        function fazerLogout() {
+            sessionStorage.removeItem('fonAuth');
+            usuarioLogado = null;
+            token = null;
+            document.getElementById('campoSenha').value = '';
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('appPage').style.display = 'none';
+        }
+
+        // ==========================
+        // NAVEGAÇÃO
+        // ==========================
+        function ativarSecao(secao) {
+            document.querySelectorAll('.menu-item').forEach(m => {
+                m.classList.toggle('active', m.getAttribute('data-secao') === secao);
+            });
+            document.querySelectorAll('.secao').forEach(s => s.style.display = 'none');
+            const alvo = document.getElementById('secao-' + secao);
+            if (alvo) alvo.style.display = 'block';
+            if (secao === 'config') {
+                document.getElementById('cfg-api-url').value = getApiBase() || '';
+                document.getElementById('cfg-api-msg').textContent = 'Status: -';
+            }
+        }
+
+        // ==========================
+        // BACKEND LOAD
+        // ==========================
+        async function carregarTudoDoBackend() {
+            const [inter, desp, hist] = await Promise.all([
+                apiFetch('/intermediacoes'),
+                apiFetch('/despesas'),
+                apiFetch('/historico')
+            ]);
+            intermediacoes = inter.items || [];
+            despesas = desp.items || [];
+            historicoPV = hist.items || [];
+        }
+        async function registrarHistorico(pv, tipoAcao) {
+            try {
+                const payload = { pv: Number(pv), tipo: tipoAcao };
+                const resp = await apiFetch('/historico', {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                historicoPV = resp.items || historicoPV;
+            } catch (e) {
+                console.warn('Histórico falhou:', e.message);
+            }
+        }
+
+        // ==========================
+        // DASHBOARD
+        // ==========================
+        function getIntermediacoesFiltradasDash() {
+            const dataIni = document.getElementById('dash-data-inicio').value;
+            const dataFim = document.getElementById('dash-data-fim').value;
+            const tipo = document.getElementById('dash-tipo').value;
+            return intermediacoes.filter(i => {
+                if (tipo && tipo !== 'Todos' && i.tipo !== tipo) return false;
+                if (dataIni || dataFim) {
+                    if (!isDateInRange(i.data, dataIni, dataFim)) return false;
+                }
+                return true;
+            });
+        }
+        function aplicarFiltrosDashboard() {
+            renderDashboard();
+            showToast('success', 'Dashboard filtrado.');
+        }
+        function limparFiltrosDashboard() {
+            document.getElementById('dash-data-inicio').value = '';
+            document.getElementById('dash-data-fim').value = '';
+            document.getElementById('dash-tipo').value = 'Todos';
+            renderDashboard();
+        }
         function renderDashboard() {
-            let total = 0, escr = 0, res = 0; data.intermediacoes.forEach(i => { const v = parseFloat(i.valor) || 0; total += v; if (i.status === 'Escriturado') escr += v; else if (i.status === 'Reserva' || i.status === 'Pré Escriturado') res += v; });
-            document.getElementById('dash-total-vendas').textContent = formatBRL(total); document.getElementById('dash-total-escr').textContent = formatBRL(escr); document.getElementById('dash-total-res').textContent = formatBRL(res);
+            const lista = getIntermediacoesFiltradasDash();
+            const total = lista.length;
+            document.getElementById('total-intermediacoes').textContent = total;
+            document.getElementById('sub-total').textContent = total === 0 ? 'Nenhum registro filtrado' : `${total} intermediação(ões) filtrada(s)`;
+            let valorEscriturado = 0;
+            let valorReservaPre = 0;
+            let valorCancelado = 0;
+            lista.forEach(i => {
+                const v = Number(i.valor) || 0;
+                if (i.status === 'Escriturado') valorEscriturado += v;
+                else if (i.status === 'Reserva' || i.status === 'Pré Escriturado') valorReservaPre += v;
+                else if (i.status === 'Cancelado') valorCancelado += v;
+            });
+            const totalVendas = valorEscriturado + valorReservaPre + valorCancelado;
+            document.getElementById('valor-escriturado').textContent = formatCurrencyBRL(valorEscriturado);
+            document.getElementById('valor-reserva').textContent = formatCurrencyBRL(valorReservaPre);
+            document.getElementById('valor-cancelado').textContent = formatCurrencyBRL(valorCancelado);
+            document.getElementById('valor-total-intermediado').textContent = formatCurrencyBRL(totalVendas);
+            const percEscr = totalVendas ? (valorEscriturado / totalVendas) * 100 : 0;
+            const percRes = totalVendas ? (valorReservaPre / totalVendas) * 100 : 0;
+            const percCan = totalVendas ? (valorCancelado / totalVendas) * 100 : 0;
+            document.getElementById('sub-escrituradas').textContent = `${percEscr.toFixed(1)}% do total de vendas`;
+            document.getElementById('sub-reservas').textContent = `${percRes.toFixed(1)}% do total de vendas`;
+            document.getElementById('sub-canceladas').textContent = `${percCan.toFixed(1)}% do total de vendas`;
+            renderChartVendasMes(lista);
+            renderChartStatus(lista);
         }
-        function renderLista() {
-            const tbody = document.querySelector('#tableInter tbody'); tbody.innerHTML = '';
-            data.intermediacoes.forEach((i, idx) => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${i.data}</td><td>${i.pv}</td><td>${i.emp}</td><td>${formatBRL(i.valor)}</td><td>${i.status}</td><td><button onclick="deleteInter(${idx})">Excluir</button></td>`; tbody.appendChild(tr); });
+        function filtrarPorStatus(statusAlias) {
+            ativarSecao('intermediacoes');
+            const sel = document.getElementById('filtro-inter-status');
+            if (statusAlias === 'Reserva/Pré') sel.value = '';
+            else sel.value = statusAlias;
+            renderIntermediacoes(statusAlias === 'Reserva/Pré');
         }
-        function renderFinanceiro() {
-            let pri = 0, fon = 0, can = 0, cen = 0; data.intermediacoes.forEach(i => { pri += parseFloat(i.rPrincipal) || 0; fon += parseFloat(i.rFon) || 0; can += parseFloat(i.rCanella) || 0; cen += parseFloat(i.rCentral) || 0; });
-            document.getElementById('fin-total-principal').textContent = formatBRL(pri); document.getElementById('fin-total-fon').textContent = formatBRL(fon); document.getElementById('fin-total-canella').textContent = formatBRL(can); document.getElementById('fin-total-central').textContent = formatBRL(cen);
+        function renderChartVendasMes(lista) {
+            const container = document.getElementById('chart-vendas-mes');
+            container.innerHTML = '';
+            if (!lista.length) {
+                container.innerHTML = '<div class="chart-placeholder">Sem dados para exibir nos últimos 6 meses.</div>';
+                return;
+            }
+            const wrapper = document.createElement('div');
+            wrapper.className = 'bar-chart';
+            const now = new Date();
+            const meses = [];
+            for (let i = 5; i >= 0; i--) {
+                const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+                const label = d.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' });
+                meses.push({ key, label, total: 0 });
+            }
+            lista.forEach(i => {
+                if (!i.data) return;
+                const [ano, mes] = i.data.split('-');
+                const key = ano + '-' + mes;
+                const alvo = meses.find(m => m.key === key);
+                if (alvo) alvo.total += Number(i.valor) || 0;
+            });
+            const maxTotal = Math.max(...meses.map(m => m.total), 0);
+            if (maxTotal === 0) {
+                container.innerHTML = '<div class="chart-placeholder">Sem valores nos últimos 6 meses.</div>';
+                return;
+            }
+            meses.forEach(m => {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                const altura = Math.max(5, Math.round((m.total / maxTotal) * 100));
+                bar.style.height = altura + '%';
+                const v = document.createElement('div');
+                v.className = 'bar-value';
+                v.textContent = m.total ? formatCurrencyBRL(m.total, 0) : 'R$ 0';
+                const l = document.createElement('div');
+                l.className = 'bar-label';
+                l.textContent = m.label;
+                bar.appendChild(v);
+                bar.appendChild(l);
+                wrapper.appendChild(bar);
+            });
+            container.appendChild(wrapper);
         }
-        document.getElementById('formInter').onsubmit = async (e) => {
-            e.preventDefault(); const newItem = {
-                data: document.getElementById('f-data').value, pv: document.getElementById('f-pv').value, ref: document.getElementById('f-ref').value, emp: document.getElementById('f-emp').value, un: document.getElementById('f-un').value, valor: document.getElementById('f-valor').value, taxaP: document.getElementById('f-taxa-p').value,
-                rPrincipal: document.getElementById('f-r-principal').value, rFon: document.getElementById('f-r-fon').value, rCanella: document.getElementById('f-r-canella').value, rCentral: document.getElementById('f-r-central').value, status: document.getElementById('f-status').value, corretor: document.getElementById('f-corretor').value
+        function renderChartStatus(lista) {
+            const container = document.getElementById('chart-status');
+            container.innerHTML = '';
+            if (!lista.length) {
+                container.innerHTML = '<div class="chart-placeholder">Sem dados para exibir.</div>';
+                return;
+            }
+            let escr = 0, res = 0, can = 0;
+            lista.forEach(i => {
+                const v = Number(i.valor) || 0;
+                if (i.status === 'Escriturado') escr += v;
+                else if (i.status === 'Reserva' || i.status === 'Pré Escriturado') res += v;
+                else if (i.status === 'Cancelado') can += v;
+            });
+            const total = escr + res + can;
+            if (total === 0) {
+                container.innerHTML = '<div class="chart-placeholder">Sem valores para exibir.</div>';
+                return;
+            }
+            const pie = document.createElement('div');
+            pie.className = 'pie-chart';
+            function addPieItem(cor, label, valor) {
+                const perc = (valor / total) * 100;
+                const item = document.createElement('div');
+                item.className = 'pie-item';
+                const col = document.createElement('div');
+                col.className = 'pie-color';
+                col.style.background = cor;
+                const txt = document.createElement('span');
+                txt.textContent = `${label}: ${formatCurrencyBRL(valor)} (${perc.toFixed(1)}%)`;
+                item.appendChild(col);
+                item.appendChild(txt);
+                pie.appendChild(item);
+            }
+            addPieItem('#1565c0', 'Escriturado', escr);
+            addPieItem('#2e7d32', 'Reserva / Pré Escriturado', res);
+            addPieItem('#c62828', 'Cancelado', can);
+            container.appendChild(pie);
+        }
+
+        // ==========================
+        // NOVA INTERMEDIAÇÃO
+        // ==========================
+        function onFifityChange() {
+            const value = document.querySelector('input[name="fifity-nova"]:checked').value;
+            const container = document.getElementById('fifity-nova-container');
+            const campoPrincipal = document.getElementById('participacao-principal-percent');
+            const campoImob = document.getElementById('imob-fifity-percent');
+            if (value === 'sim') {
+                container.style.display = 'block';
+                if (!campoImob.value) campoImob.value = '50.00';
+                campoPrincipal.value = '50.00';
+            } else {
+                container.style.display = 'none';
+                campoPrincipal.value = '100.00';
+                campoImob.value = '';
+                document.getElementById('imob-fifity-r').value = '';
+                document.getElementById('imob-fifity-taxa').value = '';
+            }
+            recalcularNovaIntermediacao();
+        }
+        function recalcularNovaIntermediacao() {
+            const valor = parseBRL(document.getElementById('valor').value);
+            const taxaPercent = parseFloat(document.getElementById('taxa-percent').value) || 0;
+            const taxaValor = valor * (taxaPercent / 100);
+            document.getElementById('taxa-valor').value = taxaValor ? formatCurrencyBRL(taxaValor) : '';
+            const fifity = document.querySelector('input[name="fifity-nova"]:checked').value;
+            let pPrincipal = parseFloat(document.getElementById('participacao-principal-percent').value) || 0;
+            let pImob = (fifity === 'sim') ? (parseFloat(document.getElementById('imob-fifity-percent').value) || 0) : 0;
+            if (fifity === 'nao') {
+                pPrincipal = 100;
+                document.getElementById('participacao-principal-percent').value = '100.00';
+            }
+            const partPrincipalR = valor * (pPrincipal / 100);
+            const partPrincipalTaxa = taxaValor * (pPrincipal / 100);
+            document.getElementById('participacao-principal-r').value = partPrincipalR ? formatCurrencyBRL(partPrincipalR) : '';
+            document.getElementById('participacao-principal-taxa').value = partPrincipalTaxa ? formatCurrencyBRL(partPrincipalTaxa) : '';
+            if (fifity === 'sim') {
+                const partImobR = valor * (pImob / 100);
+                const partImobTaxa = taxaValor * (pImob / 100);
+                document.getElementById('imob-fifity-r').value = partImobR ? formatCurrencyBRL(partImobR) : '';
+                document.getElementById('imob-fifity-taxa').value = partImobTaxa ? formatCurrencyBRL(partImobTaxa) : '';
+            }
+        }
+        function limparFormularioNovaIntermediacao() {
+            document.getElementById('formNovaIntermediacao').reset();
+            document.getElementById('taxa-valor').value = '';
+            document.getElementById('participacao-principal-r').value = '';
+            document.getElementById('participacao-principal-taxa').value = '';
+            document.getElementById('imob-fifity-r').value = '';
+            document.getElementById('imob-fifity-taxa').value = '';
+            document.getElementById('fifity-nova-container').style.display = 'none';
+            document.getElementById('participacao-principal-percent').value = '100.00';
+            editingId = null;
+            document.getElementById('btnSalvarIntermediacao').textContent = '💾 Salvar Intermediação';
+        }
+        async function onSubmitNovaIntermediacao(ev) {
+            ev.preventDefault();
+            const data = document.getElementById('data-inter').value;
+            const tipo = document.getElementById('tipo').value;
+            const pv = document.getElementById('pv').value;
+            const ref = document.getElementById('ref').value;
+            const empreendimento = document.getElementById('empreendimento').value;
+            const unidade = document.getElementById('unidade').value;
+            const valor = parseBRL(document.getElementById('valor').value);
+            const taxaPercent = parseFloat(document.getElementById('taxa-percent').value) || 0;
+            const taxaValor = valor * (taxaPercent / 100);
+            const corretor = document.getElementById('corretor').value;
+            const sup = document.getElementById('sup').value;
+            const diretoria = document.getElementById('diretoria').value;
+            const rPrincipal = parseBRL(document.getElementById('r-principal').value);
+            const rFon = parseBRL(document.getElementById('r-fon').value);
+            const rCanela = parseBRL(document.getElementById('r-canela').value);
+            const rCentral = parseBRL(document.getElementById('r-central').value);
+            const status = document.getElementById('status').value;
+            const fifity = document.querySelector('input[name="fifity-nova"]:checked').value;
+            if (!data || !tipo || !pv || !ref || !empreendimento || !unidade || !valor || !taxaPercent || !corretor || !status) {
+                showToast('error', 'Preencha todos os campos obrigatórios (*).');
+                return;
+            }
+            let pPrincipal = parseFloat(document.getElementById('participacao-principal-percent').value) || 0;
+            let pImob = (fifity === 'sim') ? (parseFloat(document.getElementById('imob-fifity-percent').value) || 0) : 0;
+            if (fifity === 'nao') { pPrincipal = 100; pImob = 0; }
+            if (fifity === 'sim' && Math.round((pPrincipal + pImob) * 100) / 100 !== 100) {
+                showToast('error', 'A soma das participações Imobiliária Principal + Fifity deve ser 100%.');
+                return;
+            }
+            const partPrincipalR = valor * (pPrincipal / 100);
+            const partPrincipalTaxa = taxaValor * (pPrincipal / 100);
+            const imobNome = document.getElementById('imob-fifity-nome').value || '';
+            const partImobR = valor * (pImob / 100);
+            const partImobTaxa = taxaValor * (pImob / 100);
+            let dataStatusEscriturado = null;
+            if (editingId) {
+                const atual = intermediacoes.find(x => String(x.id) === String(editingId));
+                dataStatusEscriturado = atual ? (atual.dataStatusEscriturado || null) : null;
+            }
+            if (status === 'Escriturado' && !dataStatusEscriturado) dataStatusEscriturado = hojeISO();
+            if (status !== 'Escriturado') dataStatusEscriturado = null;
+            const payload = {
+                id: editingId || undefined, data, tipo, pv: Number(pv), ref: Number(ref), empreendimento, unidade, valor, taxaPercent, taxaValor, corretor, sup, diretoria, rPrincipal, rFon, rCanela, rCentral, status, fifity: (fifity === 'sim'), participacaoPrincipalPercent: pPrincipal, participacaoPrincipalR: partPrincipalR, participacaoPrincipalTaxa: partPrincipalTaxa, imobFifityNome: imobNome, imobFifityPercent: pImob, imobFifityR: partImobR, imobFifityTaxa: partImobTaxa, dataStatusEscriturado
             };
-            data.intermediacoes.push(newItem); await saveData(); renderAll(); e.target.reset();
-        };
-        function deleteInter(idx) { if (confirm('Excluir?')) { data.intermediacoes.splice(idx, 1); saveData(); renderAll(); } }
-        function saveConfig() { const url = document.getElementById('config-api-url').value; localStorage.setItem('fon_api_url', url); apiUrl = url; showToast('Configuração salva'); }
-        document.getElementById('config-api-url').value = apiUrl;
-        if (localStorage.getItem('fon_token')) { document.getElementById('loginPage').style.display = 'none'; document.getElementById('appPage').style.display = 'flex'; loadData(); }
+            try {
+                if (editingId) {
+                    if (!confirm('Deseja salvar as alterações desta intermediação?')) return;
+                    await apiFetch('/intermediacoes/' + editingId, { method: 'PUT', body: JSON.stringify(payload) });
+                    await registrarHistorico(payload.pv, 'Edição');
+                    showToast('success', 'Intermediação atualizada com sucesso.');
+                } else {
+                    await apiFetch('/intermediacoes', { method: 'POST', body: JSON.stringify(payload) });
+                    await registrarHistorico(payload.pv, 'Inclusão');
+                    showToast('success', 'Intermediação cadastrada com sucesso.');
+                }
+                await carregarTudoDoBackend();
+                renderTudo();
+                limparFormularioNovaIntermediacao();
+            } catch (e) {
+                showToast('error', 'Erro ao salvar: ' + e.message);
+            }
+        }
+        function editarIntermediacaoById(id) {
+            const i = intermediacoes.find(x => String(x.id) === String(id));
+            if (!i) return;
+            editingId = i.id;
+            ativarSecao('nova-intermediacao');
+            document.getElementById('btnSalvarIntermediacao').textContent = '💾 Salvar Alterações';
+            document.getElementById('data-inter').value = i.data || '';
+            document.getElementById('tipo').value = i.tipo || '';
+            document.getElementById('pv').value = i.pv || '';
+            document.getElementById('ref').value = i.ref || '';
+            document.getElementById('empreendimento').value = i.empreendimento || '';
+            document.getElementById('unidade').value = i.unidade || '';
+            document.getElementById('valor').value = i.valor ? formatCurrencyBRL(i.valor) : '';
+            document.getElementById('taxa-percent').value = (i.taxaPercent != null) ? Number(i.taxaPercent).toFixed(2) : '';
+            document.getElementById('corretor').value = i.corretor || '';
+            document.getElementById('sup').value = i.sup || '';
+            document.getElementById('diretoria').value = i.diretoria || '';
+            document.getElementById('r-principal').value = i.rPrincipal ? formatCurrencyBRL(i.rPrincipal) : '';
+            document.getElementById('r-fon').value = i.rFon ? formatCurrencyBRL(i.rFon) : '';
+            document.getElementById('r-canela').value = i.rCanela ? formatCurrencyBRL(i.rCanela) : '';
+            document.getElementById('r-central').value = i.rCentral ? formatCurrencyBRL(i.rCentral) : '';
+            document.getElementById('status').value = i.status || '';
+            if (i.fifity) {
+                document.querySelector('input[name="fifity-nova"][value="sim"]').checked = true;
+                document.getElementById('fifity-nova-container').style.display = 'block';
+            } else {
+                document.querySelector('input[name="fifity-nova"][value="nao"]').checked = true;
+                document.getElementById('fifity-nova-container').style.display = 'none';
+            }
+            document.getElementById('participacao-principal-percent').value = (i.participacaoPrincipalPercent != null ? Number(i.participacaoPrincipalPercent) : 100).toFixed(2);
+            document.getElementById('imob-fifity-nome').value = i.imobFifityNome || '';
+            document.getElementById('imob-fifity-percent').value = i.imobFifityPercent ? Number(i.imobFifityPercent).toFixed(2) : '';
+            recalcularNovaIntermediacao();
+            showToast('warning', 'Você está editando uma intermediação existente.');
+        }
+        async function excluirIntermediacaoById(id) {
+            const i = intermediacoes.find(x => String(x.id) === String(id));
+            if (!i) return;
+            if (!confirm('Tem certeza que deseja excluir esta intermediação?')) return;
+            try {
+                await apiFetch('/intermediacoes/' + id, { method: 'DELETE' });
+                await registrarHistorico(i.pv, 'Exclusão');
+                await carregarTudoDoBackend();
+                renderTudo();
+                showToast('success', 'Intermediação excluída com sucesso.');
+            } catch (e) {
+                showToast('error', 'Erro ao excluir: ' + e.message);
+            }
+        }
+        function mostrarHistorico(pv) {
+            const lista = historicoPV.filter(h => String(h.pv) === String(pv));
+            if (!lista.length) {
+                showToast('info', 'Nenhum histórico encontrado para o PV ' + pv);
+                return;
+            }
+            let msg = 'Histórico do PV ' + pv + ':\n\n';
+            lista.forEach(h => { msg += `${h.dataHora} - ${h.tipo} por ${h.usuario}\n`; });
+            alert(msg);
+        }
+
+        // ==========================
+        // INTERMEDIAÇÕES LISTA
+        // ==========================
+        function renderIntermediacoes() {
+            const tbody = document.querySelector('#tabela-intermediacoes tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            const pvFiltro = document.getElementById('filtro-inter-pv').value.trim();
+            const tipoFiltro = document.getElementById('filtro-inter-tipo').value;
+            const statusFiltro = document.getElementById('filtro-inter-status').value;
+            const dataIni = document.getElementById('filtro-inter-data-inicio').value;
+            const dataFim = document.getElementById('filtro-inter-data-fim').value;
+            const lista = intermediacoes.filter(i => {
+                if (pvFiltro && !String(i.pv).includes(pvFiltro)) return false;
+                if (tipoFiltro && i.tipo !== tipoFiltro) return false;
+                if (statusFiltro && i.status !== statusFiltro) return false;
+                if (dataIni || dataFim) {
+                    if (!isDateInRange(i.data, dataIni, dataFim)) return false;
+                }
+                return true;
+            });
+            if (!lista.length) {
+                const tr = document.createElement('tr');
+                const td = document.createElement('td');
+                td.colSpan = 9; td.textContent = 'Nenhuma intermediação encontrada com os filtros atuais.'; td.style.textAlign = 'center';
+                tr.appendChild(td); tbody.appendChild(tr); return;
+            }
+            lista.forEach(i => {
+                const tr = document.createElement('tr');
+                const tdData = document.createElement('td'); tdData.textContent = i.data ? i.data.split('-').reverse().join('/') : ''; tr.appendChild(tdData);
+                const tdPv = document.createElement('td'); tdPv.textContent = i.pv; tr.appendChild(tdPv);
+                const tdTipo = document.createElement('td'); tdTipo.textContent = i.tipo; tr.appendChild(tdTipo);
+                const tdEmp = document.createElement('td'); tdEmp.textContent = i.empreendimento; tr.appendChild(tdEmp);
+                const tdUn = document.createElement('td'); tdUn.textContent = i.unidade; tr.appendChild(tdUn);
+                const tdCor = document.createElement('td'); tdCor.textContent = i.corretor; tr.appendChild(tdCor);
+                const tdStatus = document.createElement('td');
+                const span = document.createElement('span');
+                let cls = '';
+                if (i.status === 'Escriturado') cls = 'badge-escriturado';
+                else if (i.status === 'Pré Escriturado') cls = 'badge-pre-escriturado';
+                else if (i.status === 'Reserva') cls = 'badge-reserva';
+                else if (i.status === 'Cancelado') cls = 'badge-cancelado';
+                span.className = 'badge ' + cls; span.textContent = i.status; tdStatus.appendChild(span); tr.appendChild(tdStatus);
+                const tdValor = document.createElement('td'); tdValor.textContent = formatCurrencyBRL(i.valor); tr.appendChild(tdValor);
+                const tdAcoes = document.createElement('td');
+                const btnEdit = document.createElement('button'); btnEdit.className = 'action-btn edit'; btnEdit.textContent = 'Editar'; btnEdit.onclick = () => editarIntermediacaoById(i.id);
+                const btnDel = document.createElement('button'); btnDel.className = 'action-btn delete'; btnDel.textContent = 'Excluir'; btnDel.onclick = () => excluirIntermediacaoById(i.id);
+                const btnHist = document.createElement('button'); btnHist.className = 'action-btn history'; btnHist.textContent = 'Histórico'; btnHist.onclick = () => mostrarHistorico(i.pv);
+                tdAcoes.appendChild(btnEdit); tdAcoes.appendChild(btnDel); tdAcoes.appendChild(btnHist); tr.appendChild(tdAcoes); tbody.appendChild(tr);
+            });
+        }
+
+        // ==========================
+        // FINANCEIRO (AJUSTADO)
+        // ==========================
+        function renderFinanceiro() {
+            const tipo = document.getElementById('filtro-fin-tipo').value;
+            const statusFiltro = document.getElementById('filtro-fin-status').value;
+            const dataIni = document.getElementById('filtro-fin-data-inicio').value;
+            const dataFim = document.getElementById('filtro-fin-data-fim').value;
+            const lista = intermediacoes.filter(i => {
+                if (tipo && i.tipo !== tipo) return false;
+                if (statusFiltro && i.status !== statusFiltro) return false;
+                if (dataIni || dataFim) { if (!isDateInRange(i.data, dataIni, dataFim)) return false; }
+                if (i.status === 'Cancelado') return false;
+                return true;
+            });
+            let totalValor = 0, totalParticipacaoPrincipal = 0, totalTaxa = 0, totalTaxaParticipacao = 0, totalPrincipal = 0, totalFon = 0, totalCanella = 0, totalCentral = 0;
+            lista.forEach(i => {
+                totalValor += (Number(i.valor) || 0); totalTaxa += (Number(i.taxaValor) || 0); totalParticipacaoPrincipal += (Number(i.participacaoPrincipalR) || 0); totalTaxaParticipacao += (Number(i.participacaoPrincipalTaxa) || 0);
+                totalPrincipal += (Number(i.rPrincipal) || 0); totalFon += (Number(i.rFon) || 0); totalCanella += (Number(i.rCanela) || 0); totalCentral += (Number(i.rCentral) || 0);
+            });
+            const percTaxaSobreValor = totalValor ? (totalTaxa / totalValor) * 100 : 0;
+            const percTaxaSobrePart = totalParticipacaoPrincipal ? (totalTaxaParticipacao / totalParticipacaoPrincipal) * 100 : 0;
+            document.getElementById('fin-valor-total').textContent = formatCurrencyBRL(totalValor);
+            document.getElementById('fin-participacao-total').textContent = 'Participação Imobiliária Principal: ' + formatCurrencyBRL(totalParticipacaoPrincipal);
+            document.getElementById('fin-taxa-total').textContent = formatCurrencyBRL(totalTaxa);
+            document.getElementById('fin-taxa-percentual').textContent = percTaxaSobreValor.toFixed(2) + '% sobre o valor intermediado';
+            document.getElementById('fin-taxa-part').textContent = formatCurrencyBRL(totalTaxaParticipacao);
+            document.getElementById('fin-taxa-part-percent').textContent = percTaxaSobrePart.toFixed(2) + '% sobre a participação';
+            document.getElementById('fin-r-principal-total').textContent = formatCurrencyBRL(totalPrincipal);
+            document.getElementById('fin-r-fon-total').textContent = formatCurrencyBRL(totalFon);
+            document.getElementById('fin-r-canela-total').textContent = formatCurrencyBRL(totalCanella);
+            document.getElementById('fin-r-central-total').textContent = formatCurrencyBRL(totalCentral);
+            renderPendentesRecebidos();
+        }
+        function gerarLinhasBeneficiarios(inter, benefFilter, dataIni, dataFim) {
+            const linhas = []; const baseData = inter.data;
+            if (dataIni || dataFim) { if (!isDateInRange(baseData, dataIni, dataFim)) return linhas; }
+            function calcAging() {
+                const hoje = hojeISO();
+                if (inter.status === 'Escriturado') { const dataStatus = inter.dataStatusEscriturado || baseData; return diffDias(baseData, dataStatus); }
+                return diffDias(baseData, hoje);
+            }
+            function addLinha(tipoBenef, label, valor) {
+                if (!valor) return; if (benefFilter && benefFilter !== tipoBenef) return;
+                linhas.push({ pv: inter.pv, empreendimento: inter.empreendimento, valor: valor, status: inter.status, aging: (calcAging() != null ? calcAging() : ''), beneficiario: label });
+            }
+            addLinha('principal', 'Imobiliária Principal', Number(inter.rPrincipal) || 0);
+            addLinha('fon', 'Fon (Pessoa)', Number(inter.rFon) || 0);
+            addLinha('canella', 'Canella', Number(inter.rCanela) || 0);
+            addLinha('central', 'Central e Participações', Number(inter.rCentral) || 0);
+            return linhas;
+        }
+        function renderPendentesRecebidos() {
+            const benefFilter = document.getElementById('fin-beneficiario').value;
+            const dataIni = document.getElementById('fin-aging-data-inicio').value;
+            const dataFim = document.getElementById('fin-aging-data-fim').value;
+            const tbodyPend = document.querySelector('#tabela-pendentes tbody');
+            const tbodyRec = document.querySelector('#tabela-recebidos tbody');
+            if (!tbodyPend || !tbodyRec) return;
+            tbodyPend.innerHTML = ''; tbodyRec.innerHTML = '';
+            let totalPend = 0, totalRec = 0;
+            intermediacoes.forEach(i => {
+                if (!i.data || i.status === 'Cancelado') return;
+                const linhas = gerarLinhasBeneficiarios(i, benefFilter, dataIni, dataFim);
+                linhas.forEach(l => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${l.pv}</td><td>${l.empreendimento}</td><td>${formatCurrencyBRL(l.valor)}</td><td>${i.status}</td><td>${l.aging}</td><td>${l.beneficiario}</td>`;
+                    if (i.status === 'Escriturado') { tbodyRec.appendChild(tr); totalRec += l.valor; }
+                    else { tbodyPend.appendChild(tr); totalPend += l.valor; }
+                });
+            });
+            document.getElementById('fin-pendentes-total').textContent = 'Total pendente: ' + formatCurrencyBRL(totalPend);
+            document.getElementById('fin-recebidos-total').textContent = 'Total recebido: ' + formatCurrencyBRL(totalRec);
+        }
+
+        // ==========================
+        // CALCULADORA
+        // ==========================
+        function atualizarLayoutCalculadora() {
+            const modo = document.getElementById('calc-fifity').value;
+            const container = document.getElementById('calc-fifity-container');
+            const campoPrincipal = document.getElementById('calc-principal-percent');
+            const campoImob = document.getElementById('calc-imob-percent');
+            if (modo === 'sim') { container.style.display = 'block'; if (!campoImob.value) campoImob.value = '50.00'; campoPrincipal.value = '50.00'; }
+            else { container.style.display = 'none'; campoPrincipal.value = '100.00'; campoImob.value = ''; document.getElementById('calc-imob-r').value = ''; document.getElementById('calc-imob-taxa').value = ''; }
+        }
+        function calcularTaxas() {
+            const valor = parseFloat(document.getElementById('calc-valor').value) || 0;
+            const taxaPercent = parseFloat(document.getElementById('calc-taxa-percent').value) || 0;
+            const modo = document.getElementById('calc-fifity').value;
+            if (!valor || !taxaPercent) { showToast('error', 'Informe o valor da intermediação e a taxa.'); return; }
+            const taxaValor = valor * (taxaPercent / 100);
+            let pPrincipal = parseFloat(document.getElementById('calc-principal-percent').value) || 0;
+            let pImob = (modo === 'sim') ? (parseFloat(document.getElementById('calc-imob-percent').value) || 0) : 0;
+            if (modo === 'nao') { pPrincipal = 100; pImob = 0; document.getElementById('calc-principal-percent').value = '100.00'; }
+            if (modo === 'sim' && Math.round((pPrincipal + pImob) * 100) / 100 !== 100) { showToast('error', 'Na calculadora, Imobiliária Principal (%) + Fifity (%) também precisa somar 100%.'); return; }
+            const principalR = valor * (pPrincipal / 100); const principalTaxa = taxaValor * (pPrincipal / 100);
+            document.getElementById('calc-principal-r').value = formatCurrencyBRL(principalR); document.getElementById('calc-principal-taxa').value = formatCurrencyBRL(principalTaxa);
+            if (modo === 'sim') { const imobR = valor * (pImob / 100); const imobTaxa = taxaValor * (pImob / 100); document.getElementById('calc-imob-r').value = formatCurrencyBRL(imobR); document.getElementById('calc-imob-taxa').value = formatCurrencyBRL(imobTaxa); }
+            showToast('success', 'Cálculo de taxas realizado.');
+        }
+        function gerarPdfCalculadora() { window.print(); }
+
+        // ==========================
+        // TOP CORRETOR
+        // ==========================
+        function renderAnalise() {
+            const container = document.getElementById('chart-top-corretor'); const tbody = document.querySelector('#tabela-top-corretor tbody');
+            if (!container || !tbody) return; container.innerHTML = ''; tbody.innerHTML = '';
+            if (!intermediacoes.length) { container.innerHTML = '<div class="chart-placeholder">Sem dados para exibir.</div>'; return; }
+            const mapa = new Map();
+            intermediacoes.forEach(i => { const nome = i.corretor || 'Sem nome'; const atual = mapa.get(nome) || { valor: 0, qtd: 0 }; atual.valor += Number(i.valor) || 0; atual.qtd += 1; mapa.set(nome, atual); });
+            const ranking = Array.from(mapa.entries()).map(([nome, info]) => ({ nome, valor: info.valor, qtd: info.qtd })).sort((a, b) => b.valor - a.valor).slice(0, 5);
+            const chart = document.createElement('div'); chart.className = 'bar-chart'; const maxValor = Math.max(...ranking.map(r => r.valor), 0);
+            ranking.forEach((r, idx) => {
+                const bar = document.createElement('div'); bar.className = 'bar'; bar.style.height = Math.max(5, Math.round((r.valor / maxValor) * 100)) + '%';
+                bar.innerHTML = `<div class="bar-value">${formatCurrencyBRL(r.valor, 0)}</div><div class="bar-label">${r.nome}</div>`; chart.appendChild(bar);
+                const tr = document.createElement('tr'); tr.innerHTML = `<td>${idx + 1}</td><td>${r.nome}</td><td>${r.qtd}</td><td>${formatCurrencyBRL(r.valor)}</td>`; tbody.appendChild(tr);
+            });
+            container.appendChild(chart);
+        }
+
+        // ==========================
+        // PROJEÇÃO
+        // ==========================
+        function obterSomasPorMes(lista) {
+            const mapa = new Map();
+            lista.forEach(i => { if (!i.data) return; const d = parseDate(i.data); if (!d) return; const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); mapa.set(key, (mapa.get(key) || 0) + (Number(i.valor) || 0)); });
+            const arr = Array.from(mapa.entries()).map(([key, total]) => { const [ano, mes] = key.split('-'); const d = new Date(ano, mes - 1, 1); return { key, label: d.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' }), total, date: d }; }).sort((a, b) => a.date - b.date);
+            return arr;
+        }
+        function renderProjecao() {
+            const container = document.getElementById('chart-projecao'); const resumo = document.getElementById('projecao-resumo'); container.innerHTML = '';
+            if (!intermediacoes.length) { resumo.textContent = 'Cadastre intermediações com data para gerar tendência.'; return; }
+            const historico = obterSomasPorMes(intermediacoes); if (!historico.length) return;
+            const ultimos = historico.slice(-6); const valores = ultimos.map(m => m.total); const mediaUlt3 = valores.slice(-3).reduce((a, b) => a + b, 0) / Math.max(valores.slice(-3).length, 1);
+            const chart = document.createElement('div'); chart.className = 'bar-chart';
+            for (let i = 1; i <= 3; i++) {
+                const d = new Date(); d.setMonth(d.getMonth() + i);
+                const bar = document.createElement('div'); bar.className = 'bar'; bar.style.height = '70%';
+                bar.innerHTML = `<div class="bar-value">${formatCurrencyBRL(mediaUlt3, 0)}</div><div class="bar-label">${d.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' })}</div>`; chart.appendChild(bar);
+            }
+            container.appendChild(chart);
+            resumo.textContent = `Projeção média dos próximos 3 meses: ${formatCurrencyBRL(mediaUlt3)} com base nos últimos resultados.`;
+        }
+
+        // ==========================
+        // DESPESAS
+        // ==========================
+        function atualizarLayoutDespesas() { const modo = document.getElementById('desp-recorrente').value; document.querySelectorAll('.desp-rec').forEach(el => { el.style.display = (modo === 'sim') ? 'block' : 'none'; }); }
+        function contarPalavras(str) { return str ? str.trim().split(/\s+/).length : 0; }
+        async function salvarDespesa() {
+            const data = document.getElementById('desp-data').value; const tipo = document.getElementById('desp-tipo').value.trim(); const valor = parseBRL(document.getElementById('desp-valor').value);
+            const recorrente = document.getElementById('desp-recorrente').value; const recTipo = document.getElementById('desp-rec-tipo').value; const recInicio = document.getElementById('desp-rec-inicio').value; const recFim = document.getElementById('desp-rec-fim').value;
+            const status = document.getElementById('desp-status').value; const dataPag = document.getElementById('desp-data-pag').value; const obs = document.getElementById('desp-obs').value.trim();
+            if (!data || !tipo || !valor) { showToast('error', 'Preencha data, tipo e valor.'); return; }
+            if (contarPalavras(obs) > 25) { showToast('error', 'Observação deve ter no máximo 25 palavras.'); return; }
+            const payload = { id: despEditingId || undefined, data, tipo, valor, recorrente: recorrente === 'sim', recTipo: recorrente === 'sim' ? recTipo : null, recInicio: recorrente === 'sim' ? recInicio : null, recFim: recorrente === 'sim' ? recFim : null, status, dataPag, agendada: !!dataPag, obs };
+            try {
+                if (despEditingId) await apiFetch('/despesas/' + despEditingId, { method: 'PUT', body: JSON.stringify(payload) });
+                else await apiFetch('/despesas', { method: 'POST', body: JSON.stringify(payload) });
+                showToast('success', 'Despesa salva.'); despEditingId = null; document.getElementById('btnSalvarDespesa').textContent = '💾 Salvar Despesa'; limparFormularioDespesas(); await carregarTudoDoBackend(); renderDespesas();
+            } catch (e) { showToast('error', 'Erro ao salvar despesa: ' + e.message); }
+        }
+        function limparFormularioDespesas() { document.getElementById('formNovaIntermediacao').reset(); atualizarLayoutDespesas(); }
+        function editarDespesaById(id) {
+            const d = despesas.find(x => String(x.id) === String(id)); if (!d) return; despEditingId = d.id; document.getElementById('btnSalvarDespesa').textContent = '💾 Salvar Alterações';
+            document.getElementById('desp-data').value = d.data || ''; document.getElementById('desp-tipo').value = d.tipo || ''; document.getElementById('desp-valor').value = d.valor ? formatCurrencyBRL(d.valor) : '';
+            document.getElementById('desp-recorrente').value = d.recorrente ? 'sim' : 'nao'; document.getElementById('desp-rec-tipo').value = d.recTipo || 'diaria'; document.getElementById('desp-rec-inicio').value = d.recInicio || ''; document.getElementById('desp-rec-fim').value = d.recFim || '';
+            document.getElementById('desp-status').value = d.status || 'Pendente'; document.getElementById('desp-data-pag').value = d.dataPag || ''; document.getElementById('desp-obs').value = d.obs || ''; atualizarLayoutDespesas();
+        }
+        async function excluirDespesaById(id) { if (!confirm('Confirma a exclusão?')) return; try { await apiFetch('/despesas/' + id, { method: 'DELETE' }); await carregarTudoDoBackend(); renderDespesas(); showToast('success', 'Excluída.'); } catch (e) { showToast('error', 'Erro.'); } }
+        async function agendarDespesaById(id) { const d = despesas.find(x => String(x.id) === String(id)); if (!d || !d.dataPag) { showToast('error', 'Informe data de pagamento.'); return; } try { await apiFetch('/despesas/' + id, { method: 'PUT', body: JSON.stringify({ ...d, agendada: true }) }); await carregarTudoDoBackend(); renderDespesas(); showToast('success', 'Agendada.'); } catch (e) { showToast('error', 'Erro.'); } }
+        function renderDespesas() {
+            const tbody = document.querySelector('#tabela-despesas tbody'); if (!tbody) return; tbody.innerHTML = ''; const lista = filtrarDespesasLista();
+            let totalPend = 0, totalPago = 0;
+            lista.forEach(d => {
+                if (d.status === 'Pendente') totalPend += (d.valor || 0); if (d.status === 'Pago') totalPago += (d.valor || 0);
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${d.data}</td><td>${d.tipo}</td><td>${formatCurrencyBRL(d.valor)}</td><td>${d.recorrente ? 'Sim' : 'Não'}</td><td>${d.status}</td><td>${d.dataPag || ''}</td><td>${d.agendada ? 'Sim' : 'Não'}</td><td>${d.obs || ''}</td><td>
+                    <button class="action-btn edit" onclick="editarDespesaById('${d.id}')">Editar</button>
+                    <button class="action-btn delete" onclick="excluirDespesaById('${d.id}')">Excluir</button>
+                    <button class="action-btn history" onclick="agendarDespesaById('${d.id}')">Agendar</button>
+                </td>`; tbody.appendChild(tr);
+            });
+            document.getElementById('desp-totais').textContent = `Totais - Pendente: ${formatCurrencyBRL(totalPend)} | Pago: ${formatCurrencyBRL(totalPago)}`;
+        }
+        function imprimirRelatorioDespesas() { window.print(); }
+
+        // ==========================
+        // RENDER GERAL
+        // ==========================
+        function renderTudo() { renderDashboard(); renderIntermediacoes(); renderFinanceiro(); renderAnalise(); renderProjecao(); renderDespesas(); }
+
+        // ==========================
+        // INIT
+        // ==========================
+        document.addEventListener('DOMContentLoaded', async () => {
+            updateApiStatus(); const authStr = sessionStorage.getItem('fonAuth');
+            if (authStr) {
+                try { const parsed = JSON.parse(authStr); token = parsed.token; usuarioLogado = parsed.usuarioLogado; document.getElementById('nomeUsuario').textContent = `👤 ${usuarioLogado.nome} (${usuarioLogado.email})`; document.getElementById('loginPage').style.display = 'none'; document.getElementById('appPage').style.display = 'flex'; ativarSecao('dashboard'); await carregarTudoDoBackend(); renderTudo(); }
+                catch (e) { sessionStorage.removeItem('fonAuth'); }
+            }
+            document.getElementById('btnLogin').addEventListener('click', fazerLogin);
+            document.getElementById('btnLogout').addEventListener('click', fazerLogout);
+            document.querySelectorAll('.menu-item').forEach(m => { m.addEventListener('click', () => { const sec = m.getAttribute('data-secao'); ativarSecao(sec); if (sec === 'financeiro') renderFinanceiro(); if (sec === 'analise') renderAnalise(); if (sec === 'projecao') renderProjecao(); if (sec === 'despesas') renderDespesas(); }); });
+            document.getElementById('formNovaIntermediacao').addEventListener('submit', onSubmitNovaIntermediacao);
+            document.querySelectorAll('input[name="fifity-nova"]').forEach(radio => radio.addEventListener('change', onFifityChange));
+            document.getElementById('taxa-percent').addEventListener('input', recalcularNovaIntermediacao);
+            document.getElementById('participacao-principal-percent').addEventListener('input', recalcularNovaIntermediacao);
+            document.getElementById('imob-fifity-percent').addEventListener('input', recalcularNovaIntermediacao);
+            aplicarMascaraMoeda('valor'); aplicarMascaraMoeda('r-principal'); aplicarMascaraMoeda('r-fon'); aplicarMascaraMoeda('r-canela'); aplicarMascaraMoeda('r-central'); aplicarMascaraMoeda('desp-valor');
+            document.getElementById('calc-fifity').addEventListener('change', atualizarLayoutCalculadora);
+            const selRecDes = document.getElementById('desp-recorrente'); if (selRecDes) { selRecDes.addEventListener('change', atualizarLayoutDespesas); atualizarLayoutDespesas(); }
+            setInterval(() => { if (usuarioLogado) { const hoje = hojeISO(); despesas.forEach(d => { if (d.agendada && d.dataPag === hoje && d.status === 'Pendente') showToast('warning', `Lembrete: despesa "${d.tipo}" vence hoje.`); }); } }, 60000);
+        });
     </script>
 </body>
 </html>
