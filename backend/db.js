@@ -1,27 +1,93 @@
 const fs = require('fs');
+const fsp = require('fs/promises');
 const path = require('path');
-const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
-const DB_FILE = path.join(DATA_DIR, 'db.json');
-const BACKUP_DIR = path.join(DATA_DIR, 'backups');
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-if (!fs.existsSync(BACKUP_DIR)) fs.mkdirSync(BACKUP_DIR, { recursive: true });
-const defaultData = { intermediacoes: [], despesas: [], historicoPV: [], config: {} };
-function readDB() {
-  if (!fs.existsSync(DB_FILE)) { fs.writeFileSync(DB_FILE, JSON.stringify(defaultData, null, 2)); return defaultData; }
-  try { return JSON.parse(fs.readFileSync(DB_FILE, 'utf-8')); } catch (e) { return defaultData; }
+
+function getDataRoot() {
+  const root = process.env.DATA_DIR || path.join(process.cwd(), 'data');
+  return root;
 }
-function writeDB(data) {
-  try { fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2)); createBackup(); } catch (e) { console.error(e); }
+
+function getPaths() {
+  const root = getDataRoot();
+  const fonDir = path.join(root, 'fon');
+  const dbFile = path.join(fonDir, 'db.json');
+  const backupDir = path.join(fonDir, 'backups');
+  return { root, fonDir, dbFile, backupDir };
 }
-function createBackup() {
+
+async function ensureDirs() {
+  const { fonDir, backupDir } = getPaths();
+  await fsp.mkdir(fonDir, { recursive: true });
+  await fsp.mkdir(backupDir, { recursive: true });
+}
+
+function defaultDB() {
+  return {
+    meta: { createdAt: new Date().toISOString() },
+    intermediacoes: [],
+    despesas: [],
+    historicoPV: []
+  };
+}
+
+async function readDB() {
+  await ensureDirs();
+  const { dbFile } = getPaths();
   try {
-    const now = new Date();
-    const dateStr = now.toISOString().split('T')[0];
-    const timeStr = now.toTimeString().split(' ')[0].replace(/:/g, '-');
-    const backupFile = path.join(BACKUP_DIR, `backup-${dateStr}-${timeStr}.json`);
-    fs.copyFileSync(DB_FILE, backupFile);
-    const files = fs.readdirSync(BACKUP_DIR).filter(f => f.startsWith('backup-')).sort().reverse();
-    if (files.length > 30) files.slice(30).forEach(f => fs.unlinkSync(path.join(BACKUP_DIR, f)));
-  } catch (e) { console.error(e); }
+    const raw = await fsp.readFile(dbFile, 'utf-8');
+    const data = JSON.parse(raw);
+    if (!data.intermediacoes) data.intermediacoes = [];
+    if (!data.despesas) data.despesas = [];
+    if (!data.historicoPV) data.historicoPV = [];
+    if (!data.meta) data.meta = { createdAt: new Date().toISOString() };
+    return data;
+  } catch (e) {
+    const db = defaultDB();
+    await writeDB(db);
+    return db;
+  }
 }
-module.exports = { readDB, writeDB };
+
+async function writeDB(db) {
+  await ensureDirs();
+  const { dbFile } = getPaths();
+  const tmp = dbFile + '.tmp';
+  const payload = JSON.stringify(db, null, 2);
+  await fsp.writeFile(tmp, payload, 'utf-8');
+  await fsp.rename(tmp, dbFile);
+}
+
+function ymd() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+async function createBackup() {
+  await ensureDirs();
+  const { dbFile, backupDir } = getPaths();
+  if (!fs.existsSync(dbFile)) {
+    await writeDB(defaultDB());
+  }
+  const filename = `db-${ymd()}.json`;
+  const dest = path.join(backupDir, filename);
+  if (!fs.existsSync(dest)) {
+    await fsp.copyFile(dbFile, dest);
+  }
+  const files = (await fsp.readdir(backupDir))
+    .filter(f => f.startsWith('db-') && f.endsWith('.json'))
+    .sort();
+  const extra = files.length - 30;
+  if (extra > 0) {
+    const toDelete = files.slice(0, extra);
+    for (const f of toDelete) {
+      try {
+        await fsp.unlink(path.join(backupDir, f));
+      } catch {}
+    }
+  }
+}
+
+module.exports = { getPaths, readDB, writeDB, createBackup };
