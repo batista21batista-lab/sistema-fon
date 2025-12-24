@@ -1003,6 +1003,11 @@
         // CONFIG API
         // ==========================
         const API_KEY = 'fonApiBaseUrl';
+
+// Initialize default Render API URL if not configured
+if (!localStorage.getItem(API_KEY)) {
+    localStorage.setItem(API_KEY, 'https://sistema-fon.onrender.com');
+}
         function getApiBase() {
             const saved = localStorage.getItem(API_KEY);
             return (saved && saved.trim()) ? saved.trim().replace(/\/+$/, '') : '';
