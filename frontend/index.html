@@ -1817,6 +1817,11 @@
         // INIT
         // ==========================
         document.addEventListener('DOMContentLoaded', async () => {
+                    // Set default Render API URL
+        const apiUrlInput = document.getElementById('cfg-api-url');
+        if (apiUrlInput && !apiUrlInput.value) {
+            apiUrlInput.value = 'https://sistema-fon.onrender.com';
+        }
             updateApiStatus(); const authStr = sessionStorage.getItem('fonAuth');
             if (authStr) {
                 try { const parsed = JSON.parse(authStr); token = parsed.token; usuarioLogado = parsed.usuarioLogado; document.getElementById('nomeUsuario').textContent = `👤 ${usuarioLogado.nome} (${usuarioLogado.email})`; document.getElementById('loginPage').style.display = 'none'; document.getElementById('appPage').style.display = 'flex'; ativarSecao('dashboard'); await carregarTudoDoBackend(); renderTudo(); }
