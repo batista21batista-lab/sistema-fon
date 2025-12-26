@@ -1031,8 +1031,7 @@ if (!localStorage.getItem(API_KEY)) {
         function salvarConfigApi() {
             const el = document.getElementById('cfg-api-url'); 
         const v = el ? el.value.trim() : ''; 
-        const base = v || = v || 'https://sistema-fon.onrender.com';1034
-
+            const base = v || localStorage.getItem('API_BASE') || 'https://sistema-fon.onrender.com';
             setApiBase(v);
             showToast('success', 'URL da API salva.');
             document.getElementById('cfg-api-msg').textContent = 'Status: URL salva: ' + getApiBase();
