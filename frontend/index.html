@@ -1006,11 +1006,11 @@
 
 // Initialize default Render API URL if not configured
 if (!localStorage.getItem(API_KEY)) {
-    localStorage.setItem(API_KEY, 'https://sistema-fon.vercel.app/api');
+    localStorage.setItem(API_KEY, = v || 'https://sistema-fon.onrender.com');
 }
         function getApiBase() {
             const saved = localStorage.getItem(API_KEY);
-            return (saved && saved.trim()) ? saved.trim().replace(/\/+$/, '') :'https://sistema-fon.vercel.app/api';
+            return (saved && saved.trim()) ? saved.trim().replace(/\/+$/, '') := v || 'https://sistema-fon.onrender.com';
         }
         function setApiBase(url) {
             const u = (url || '').trim().replace(/\/+$/, '');
@@ -1031,7 +1031,8 @@ if (!localStorage.getItem(API_KEY)) {
         function salvarConfigApi() {
             const el = document.getElementById('cfg-api-url'); 
         const v = el ? el.value.trim() : ''; 
-        const base = v || 'https://sistema-fon.vercel.app/api';
+        const base = v || = v || 'https://sistema-fon.onrender.com';1034
+
             setApiBase(v);
             showToast('success', 'URL da API salva.');
             document.getElementById('cfg-api-msg').textContent = 'Status: URL salva: ' + getApiBase();
@@ -1823,7 +1824,7 @@ if (!localStorage.getItem(API_KEY)) {
                     // Set default Render API URL
         const apiUrlInput = document.getElementById('cfg-api-url');
         if (apiUrlInput && !apiUrlInput.value) {
-            apiUrlInput.value = 'https://sistema-fon.vercel.app/api';
+            apiUrlInput.value = = v || 'https://sistema-fon.onrender.com';
         }
             updateApiStatus(); const authStr = sessionStorage.getItem('fonAuth');
             if (authStr) {
