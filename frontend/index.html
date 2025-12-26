@@ -1010,7 +1010,7 @@ if (!localStorage.getItem(API_KEY)) {
 }
         function getApiBase() {
             const saved = localStorage.getItem(API_KEY);
-            return (saved && saved.trim()) ? saved.trim().replace(/\/+$/, '') :'https://sistema-fon.onrender.com'';
+            return (saved && saved.trim()) ? saved.trim().replace(/\/+$/, '') :'https://sistema-fon.onrender.com';
         }
         function setApiBase(url) {
             const u = (url || '').trim().replace(/\/+$/, '');
