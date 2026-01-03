@@ -144,6 +144,9 @@ MIT - Sinta-se livre para usar, modificar e distribuir
 ✅ **Frontend** deployado no Netlify: https://sistema-fon.netlify.app/
 ⏳ **Backend** em desenvolvimento no Render
 
+## Atualizações recentes
+- 2026-01-03: Adicionado `backend/.env.example` (exemplo de variáveis de ambiente para desenvolvimento); corrigido `backend/Dockerfile` para expor a porta **3000**; criado workflow básico de CI (`.github/workflows/ci.yml`) com testes de smoke para `/api/health` e `/api/auth/login`.
+
 ## Atualização: 2025-12-19 02:05 AM
 - Frontend publicado com sucesso
 - Publish directory configurado para `/frontend`

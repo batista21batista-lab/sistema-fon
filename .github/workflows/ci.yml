@@ -1,0 +1,43 @@
+name: CI - Backend Smoke Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: backend
+
+      - name: Start backend
+        run: |
+          cd backend
+          npm start &
+          echo "waiting for server..."
+          for i in {1..20}; do
+            if curl -sS http://localhost:3000/api/health > /dev/null; then
+              echo "server ready"; break
+            fi
+            sleep 1
+          done
+
+      - name: Smoke test - /api/health
+        run: |
+          curl -sS http://localhost:3000/api/health | jq -e '.status == "ok"' > /dev/null
+
+      - name: Smoke test - login
+        run: |
+          curl -sS -X POST http://localhost:3000/api/auth/login -H 'Content-Type: application/json' -d '{"email":"admin@fon.com.br","senha":"admin123"}' | jq -e '.token and .user.email == "admin@fon.com.br"' > /dev/null
