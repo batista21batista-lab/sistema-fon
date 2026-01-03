@@ -1,6 +1,6 @@
 # sistema-fon
 
-![CI](https://github.com/batista21batista-lab/sistema-fon/actions/workflows/ci.yml/badge.svg) ![Lint](https://github.com/batista21batista-lab/sistema-fon/actions/workflows/lint.yml/badge.svg) ![Coverage](https://github.com/batista21batista-lab/sistema-fon/actions/workflows/coverage.yml/badge.svg)
+![CI](https://github.com/batista21batista-lab/sistema-fon/actions/workflows/ci.yml/badge.svg) ![Lint](https://github.com/batista21batista-lab/sistema-fon/actions/workflows/lint.yml/badge.svg) ![Coverage](https://github.com/batista21batista-lab/sistema-fon/actions/workflows/coverage.yml/badge.svg) [![Codecov](https://codecov.io/gh/batista21batista-lab/sistema-fon/branch/main/graph/badge.svg)](https://codecov.io/gh/batista21batista-lab/sistema-fon)
 
 ## Fluxo Operacional de Negocios
 
@@ -147,7 +147,7 @@ MIT - Sinta-se livre para usar, modificar e distribuir
 ⏳ **Backend** em desenvolvimento no Render
 
 ## Atualizações recentes
-- 2026-01-03: Adicionado `backend/.env.example` (exemplo de variáveis de ambiente para desenvolvimento); corrigido `backend/Dockerfile` para expor a porta **3000**; criado workflow básico de CI (`.github/workflows/ci.yml`) com testes de smoke para `/api/health` e `/api/auth/login`.
+- 2026-01-03: Adicionado `backend/.env.example` (exemplo de variáveis de ambiente para desenvolvimento); corrigido `backend/Dockerfile` para expor a porta **3000**; criado workflow básico de CI (`.github/workflows/ci.yml`) com testes de smoke para `/api/health` e `/api/auth/login`. Adicionado integração com Codecov e verificação de cobertura (limiar 90%) na workflow de Coverage.
 
 ### Como rodar os testes de integração localmente
 No diretório `backend` rode:
