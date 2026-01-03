@@ -20,7 +20,9 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
+        working-directory: backend
         run: npm ci || npm install --no-audit --no-fund
 
       - name: Run lint
+        working-directory: backend
         run: npm run lint
