@@ -1018,13 +1018,13 @@ if (!localStorage.getItem(API_KEY)) {
             updateApiStatus();
         }
         function apiUrl(path) {
-            const base = getApiBase();
+            const base = getApiBase()
             if (!base) return '';
             return base.replace(/\/+$/, '') + '/api' + path;
         }
         function updateApiStatus() {
             const el = document.getElementById('apiStatus');
-            const base = getApiBase();
+            const base = getApiBase()
             el.textContent = base ? ('API: ' + base) : 'API: (não configurada)';
             el.style.color = base ? '#2e7d32' : '#c62828';
         }
@@ -1034,8 +1034,10 @@ if (!localStorage.getItem(API_KEY)) {
             const base = v || localStorage.getItem('API_BASE') || 'https://sistema-fon.onrender.com';
             setApiBase(v);
             showToast('success', 'URL da API salva.');
-            document.getElementById('cfg-api-msg').textContent = 'Status: URL salva: ' + getApiBase();
+            document.getElementById('cfg-api-msg').textContent = 'Status: URL salva: ' + getApiBase()
         }
+        sed -n '1215,1217p' frontend/index.html
+        
         async function testarApi() {
             const msg = document.getElementById('cfg-api-msg');
             msg.textContent = 'Status: testando...';
@@ -1823,9 +1825,10 @@ if (!localStorage.getItem(API_KEY)) {
                     // Set default Render API URL
         const apiUrlInput = document.getElementById('cfg-api-url');
         if (apiUrlInput && !apiUrlInput.value) {
-            apiUrlInput.value = = v || 'https://sistema-fon.onrender.com';
+            apiUrlInput.value = getApiBase();
         }
-            updateApiStatus(); const authStr = sessionStorage.getItem('fonAuth');
+        updateApiStatus();
+            const authStr = sessionStorage.getItem('fonAuth');
             if (authStr) {
                 try { const parsed = JSON.parse(authStr); token = parsed.token; usuarioLogado = parsed.usuarioLogado; document.getElementById('nomeUsuario').textContent = `👤 ${usuarioLogado.nome} (${usuarioLogado.email})`; document.getElementById('loginPage').style.display = 'none'; document.getElementById('appPage').style.display = 'flex'; ativarSecao('dashboard'); await carregarTudoDoBackend(); renderTudo(); }
                 catch (e) { sessionStorage.removeItem('fonAuth'); }

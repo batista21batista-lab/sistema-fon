@@ -1,5 +1,7 @@
 # sistema-fon
 
+![CI](https://github.com/batista21batista-lab/sistema-fon/actions/workflows/ci.yml/badge.svg) ![Lint](https://github.com/batista21batista-lab/sistema-fon/actions/workflows/lint.yml/badge.svg) ![Coverage](https://github.com/batista21batista-lab/sistema-fon/actions/workflows/coverage.yml/badge.svg) [![Codecov](https://codecov.io/gh/batista21batista-lab/sistema-fon/branch/main/graph/badge.svg)](https://codecov.io/gh/batista21batista-lab/sistema-fon)
+
 ## Fluxo Operacional de Negocios
 
 Sistema completo de gestão de intermediações imobiliárias com frontend em HTML/JavaScript puro e backend em Node.js/Express.
@@ -143,6 +145,54 @@ MIT - Sinta-se livre para usar, modificar e distribuir
 ---
 ✅ **Frontend** deployado no Netlify: https://sistema-fon.netlify.app/
 ⏳ **Backend** em desenvolvimento no Render
+
+## Atualizações recentes
+- 2026-01-03: Adicionado `backend/.env.example` (exemplo de variáveis de ambiente para desenvolvimento); corrigido `backend/Dockerfile` para expor a porta **3000**; criado workflow básico de CI (`.github/workflows/ci.yml`) com testes de smoke para `/api/health` e `/api/auth/login`. Adicionado integração com Codecov e verificação de cobertura (limiar 90%) na workflow de Coverage.
+
+### Como rodar os testes de integração localmente
+No diretório `backend` rode:
+
+```bash
+npm ci
+npm start &
+npm run test:integration
+```
+
+O script `npm run test:integration` executa um fluxo de teste que verifica health, login, criação e exclusão de uma intermediação.
+
+### Deploy automático do Frontend
+Adicionei um workflow que publica a pasta `/frontend` na branch `gh-pages` sempre que houver push na `main` (`.github/workflows/deploy-frontend.yml`). Após o primeiro push, habilite GitHub Pages nas configurações do repositório (Settings > Pages) apontando para a branch `gh-pages` e pasta `/`.
+
+### Publicar backend como imagem Docker (GHCR)
+Adicionei um workflow para **build e publish** da imagem do backend para o GitHub Container Registry em `ghcr.io/${{ github.repository_owner }}/sistema-fon-backend` (`.github/workflows/docker-publish-backend.yml`). Para habilitar o fluxo automático:
+
+- Verifique se `packages: write` está permitido para `GITHUB_TOKEN` (normalmente disponível).
+- Para deploy manual, você pode puxar a imagem assim:
+
+```bash
+docker pull ghcr.io/<YOUR_ORG>/sistema-fon-backend:latest
+docker run -e JWT_SECRET="seu-segredo" -e CORS_ORIGINS="https://seu-frontend" -e DATA_DIR=/data -p 3000:3000 ghcr.io/<YOUR_ORG>/sistema-fon-backend:latest
+```
+
+> Observação: para deploy em serviços como Render, Railway ou Docker Compose, use as variáveis listadas em `backend/.env.example`.
+
+### Deploy automático para Render (via API)
+Também adicionei um workflow que aciona um *deploy* no Render usando a API (`.github/workflows/deploy-backend-render.yml`). Para usar:
+
+1. Crie um API key no Render (Account → API Keys) e copie o **Bearer token**.
+2. No repositório GitHub, vá em **Settings → Secrets → Actions** e adicione duas secrets:
+   - `RENDER_API_KEY` = seu token Bearer do Render
+   - `RENDER_SERVICE_ID` = ID do serviço no Render (encontrado na URL do serviço ou nas configurações do serviço)
+3. O workflow roda em pushes para `main` ou manualmente via *workflow_dispatch*. Ele:
+   - chama `POST https://api.render.com/v1/services/{serviceId}/deploys` com `Authorization: Bearer <API_KEY>` para criar um deploy;
+   - faz polling no deploy até `success` ou `failed` (timeout após ~5 minutos);
+   - falha o job se o deploy falhar.
+
+> Observação: este workflow apenas dispara e monitora o deploy no Render — para criação inicial do serviço (env vars, build command, disk persistente) recomendamos usar a interface do Render ou automações específicas da plataforma.
+
+> Dica: Se preferir Railway, eu posso adicionar um workflow equivalente quando você me confirmar os detalhes de API/Secrets que deseja usar.
+
+> Dica: se preferir Netlify, mantenha o deploy manual ou configure integração automática no Netlify (recomendado para controle de domínio e TLS).
 
 ## Atualização: 2025-12-19 02:05 AM
 - Frontend publicado com sucesso
