@@ -1,6 +1,6 @@
 # sistema-fon
 
-![CI](https://github.com/batista21batista-lab/sistema-fon/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/batista21batista-lab/sistema-fon/actions/workflows/ci.yml/badge.svg) ![Lint](https://github.com/batista21batista-lab/sistema-fon/actions/workflows/lint.yml/badge.svg) ![Coverage](https://github.com/batista21batista-lab/sistema-fon/actions/workflows/coverage.yml/badge.svg)
 
 ## Fluxo Operacional de Negocios
 
