@@ -161,6 +161,21 @@ O script `npm run test:integration` executa um fluxo de teste que verifica healt
 ### Deploy automático do Frontend
 Adicionei um workflow que publica a pasta `/frontend` na branch `gh-pages` sempre que houver push na `main` (`.github/workflows/deploy-frontend.yml`). Após o primeiro push, habilite GitHub Pages nas configurações do repositório (Settings > Pages) apontando para a branch `gh-pages` e pasta `/`.
 
+### Publicar backend como imagem Docker (GHCR)
+Adicionei um workflow para **build e publish** da imagem do backend para o GitHub Container Registry em `ghcr.io/${{ github.repository_owner }}/sistema-fon-backend` (`.github/workflows/docker-publish-backend.yml`). Para habilitar o fluxo automático:
+
+- Verifique se `packages: write` está permitido para `GITHUB_TOKEN` (normalmente disponível).
+- Para deploy manual, você pode puxar a imagem assim:
+
+```bash
+docker pull ghcr.io/<YOUR_ORG>/sistema-fon-backend:latest
+docker run -e JWT_SECRET="seu-segredo" -e CORS_ORIGINS="https://seu-frontend" -e DATA_DIR=/data -p 3000:3000 ghcr.io/<YOUR_ORG>/sistema-fon-backend:latest
+```
+
+> Observação: para deploy em serviços como Render, Railway ou Docker Compose, use as variáveis listadas em `backend/.env.example`.
+
+> Dica: Caso prefira outro registry (Docker Hub, GCR), substitua a etapa `Login to GitHub Container Registry` e as tags no workflow.
+
 > Dica: se preferir Netlify, mantenha o deploy manual ou configure integração automática no Netlify (recomendado para controle de domínio e TLS).
 
 ## Atualização: 2025-12-19 02:05 AM
