@@ -33,10 +33,10 @@ jobs:
           name: coverage-report
           path: backend/coverage
 
-      - name: Check coverage threshold
+      - name: Check coverage threshold (lines >= 90%)
         working-directory: backend
         run: |
-          node -e "const s=require('./coverage/coverage-summary.json'); const lines=s.total.lines.pct; if (lines < 90) { console.error(`Coverage lines ${lines}% < 90%`); process.exit(1);} console.log(`Coverage OK: ${lines}%`);"
+          awk '/LF:/{f+=$2} /LH:/{h+=$2} END{ if(f==0){print "No lines info found"; exit 1} pct=h/f*100; printf "Coverage lines %.2f%% (%d/%d)\n", pct, h, f; if(pct<90){print "Coverage below threshold"; exit 1}}' coverage/lcov.info
 
       - name: Upload to Codecov
         uses: codecov/codecov-action@v4
