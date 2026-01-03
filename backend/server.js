@@ -212,11 +212,15 @@ cron.schedule('0 3 * * *', async () => {
   }
 }, { timezone: TZ });
 
-app.listen(PORT, async () => {
-  console.log(`FON backend rodando na porta ${PORT}`);
-  console.log('CORS_ORIGINS:', allowedOrigins.length ? allowedOrigins : '(liberado geral)');
-  console.log('DATA_DIR:', process.env.DATA_DIR || '(local ./data)');
-  try {
-    await createBackup();
-  } catch {}
-});
+if (require.main === module) {
+  app.listen(PORT, async () => {
+    console.log(`FON backend rodando na porta ${PORT}`);
+    console.log('CORS_ORIGINS:', allowedOrigins.length ? allowedOrigins : '(liberado geral)');
+    console.log('DATA_DIR:', process.env.DATA_DIR || '(local ./data)');
+    try {
+      await createBackup();
+    } catch {}
+  });
+}
+
+module.exports = app;
