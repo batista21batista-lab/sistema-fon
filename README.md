@@ -147,6 +147,22 @@ MIT - Sinta-se livre para usar, modificar e distribuir
 ## Atualizações recentes
 - 2026-01-03: Adicionado `backend/.env.example` (exemplo de variáveis de ambiente para desenvolvimento); corrigido `backend/Dockerfile` para expor a porta **3000**; criado workflow básico de CI (`.github/workflows/ci.yml`) com testes de smoke para `/api/health` e `/api/auth/login`.
 
+### Como rodar os testes de integração localmente
+No diretório `backend` rode:
+
+```bash
+npm ci
+npm start &
+npm run test:integration
+```
+
+O script `npm run test:integration` executa um fluxo de teste que verifica health, login, criação e exclusão de uma intermediação.
+
+### Deploy automático do Frontend
+Adicionei um workflow que publica a pasta `/frontend` na branch `gh-pages` sempre que houver push na `main` (`.github/workflows/deploy-frontend.yml`). Após o primeiro push, habilite GitHub Pages nas configurações do repositório (Settings > Pages) apontando para a branch `gh-pages` e pasta `/`.
+
+> Dica: se preferir Netlify, mantenha o deploy manual ou configure integração automática no Netlify (recomendado para controle de domínio e TLS).
+
 ## Atualização: 2025-12-19 02:05 AM
 - Frontend publicado com sucesso
 - Publish directory configurado para `/frontend`
