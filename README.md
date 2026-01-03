@@ -174,7 +174,21 @@ docker run -e JWT_SECRET="seu-segredo" -e CORS_ORIGINS="https://seu-frontend" -e
 
 > Observação: para deploy em serviços como Render, Railway ou Docker Compose, use as variáveis listadas em `backend/.env.example`.
 
-> Dica: Caso prefira outro registry (Docker Hub, GCR), substitua a etapa `Login to GitHub Container Registry` e as tags no workflow.
+### Deploy automático para Render (via API)
+Também adicionei um workflow que aciona um *deploy* no Render usando a API (`.github/workflows/deploy-backend-render.yml`). Para usar:
+
+1. Crie um API key no Render (Account → API Keys) e copie o **Bearer token**.
+2. No repositório GitHub, vá em **Settings → Secrets → Actions** e adicione duas secrets:
+   - `RENDER_API_KEY` = seu token Bearer do Render
+   - `RENDER_SERVICE_ID` = ID do serviço no Render (encontrado na URL do serviço ou nas configurações do serviço)
+3. O workflow roda em pushes para `main` ou manualmente via *workflow_dispatch*. Ele:
+   - chama `POST https://api.render.com/v1/services/{serviceId}/deploys` com `Authorization: Bearer <API_KEY>` para criar um deploy;
+   - faz polling no deploy até `success` ou `failed` (timeout após ~5 minutos);
+   - falha o job se o deploy falhar.
+
+> Observação: este workflow apenas dispara e monitora o deploy no Render — para criação inicial do serviço (env vars, build command, disk persistente) recomendamos usar a interface do Render ou automações específicas da plataforma.
+
+> Dica: Se preferir Railway, eu posso adicionar um workflow equivalente quando você me confirmar os detalhes de API/Secrets que deseja usar.
 
 > Dica: se preferir Netlify, mantenha o deploy manual ou configure integração automática no Netlify (recomendado para controle de domínio e TLS).
 

@@ -41,3 +41,8 @@ jobs:
       - name: Smoke test - login
         run: |
           curl -sS -X POST http://localhost:3000/api/auth/login -H 'Content-Type: application/json' -d '{"email":"admin@fon.com.br","senha":"admin123"}' | jq -e '.token and .user.email == "admin@fon.com.br"' > /dev/null
+
+      - name: Integration tests
+        run: |
+          cd backend
+          npm run test:integration
