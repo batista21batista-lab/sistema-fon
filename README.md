@@ -1,5 +1,7 @@
 # sistema-fon
 
+![CI](https://github.com/batista21batista-lab/sistema-fon/actions/workflows/ci.yml/badge.svg)
+
 ## Fluxo Operacional de Negocios
 
 Sistema completo de gestão de intermediações imobiliárias com frontend em HTML/JavaScript puro e backend em Node.js/Express.
