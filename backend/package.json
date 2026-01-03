@@ -6,7 +6,9 @@
   "type": "commonjs",
   "scripts": {
     "start": "node server.js",
-    "test:integration": "node test/integration.js"
+    "test:integration": "node test/integration.js",
+    "lint": "eslint . --ext .js",
+    "test": "jest --reporters=default"
   },
   "engines": {
     "node": ">=18"
@@ -14,11 +16,16 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.19.2",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
-    "node-cron": "^3.0.3",
-    "dotenv": "^16.0.3"
+    "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "eslint": "9.39.2",
+    "eslint-plugin-node": "11.1.0",
+    "jest": "30.2.0"
   }
 }
