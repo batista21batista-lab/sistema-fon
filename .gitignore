@@ -137,3 +137,16 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+node_modules/
+.env
+.env.local
+.env.*.local
+public/index.html
+api/*.js
+!api/login.js
+!api/health.js
+coverage/
+.nyc_output/
+dist/
+build/
+*.log

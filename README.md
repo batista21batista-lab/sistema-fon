@@ -2,6 +2,8 @@
 
 ![CI](https://github.com/batista21batista-lab/sistema-fon/actions/workflows/ci.yml/badge.svg) ![Lint](https://github.com/batista21batista-lab/sistema-fon/actions/workflows/lint.yml/badge.svg) ![Coverage](https://github.com/batista21batista-lab/sistema-fon/actions/workflows/coverage.yml/badge.svg) [![Codecov](https://codecov.io/gh/batista21batista-lab/sistema-fon/branch/main/graph/badge.svg)](https://codecov.io/gh/batista21batista-lab/sistema-fon)
 
+> Nota: o upload para o Codecov está configurado, mas para repositórios com branches protegidas é necessário configurar um token de upload. Para ativar uploads autenticados do Codecov em CI, adicione um secret `CODECOV_TOKEN` em Settings → Secrets → Actions com o token do Codecov; o workflow usará `secrets.CODECOV_TOKEN` automaticamente se presente.
+
 ## Fluxo Operacional de Negocios
 
 Sistema completo de gestão de intermediações imobiliárias com frontend em HTML/JavaScript puro e backend em Node.js/Express.
